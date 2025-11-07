@@ -1,12 +1,13 @@
-import './App.css'
+import Register from "./components/Register"
+import axios from 'axios'
+import React from 'react'
 import { Login } from './components/Login'
 
-function App() {
-
+const App = () => {
   return (
     <>
-    <Login />
-    
+      <Register/>
+      <Login />
     </>
   )
 }
