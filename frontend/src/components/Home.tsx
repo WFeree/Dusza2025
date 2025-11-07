@@ -1,0 +1,35 @@
+import { Button } from "@/components/ui/button"
+import { Crown, Joystick } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+
+export function Home() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4 gap-8">
+      <h1 className="text-3xl font-bold text-center">Üdvözöllek a Damareen játékban!</h1>
+      <h3 className="text-lg text-muted-foreground text-center">Válassz szerepkört!</h3>
+
+      <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+        <button
+          onClick={() => navigate("/gamemaster")} className="relative w-full px-8 py-3 text-lg font-semibold text-white rounded-lg overflow-hidden group bg-linear-to-r from-indigo-500 to-purple-600 hover:from-purple-600 hover:to-indigo-500 transition-all duration-500">
+          <span className="absolute inset-0 w-full h-full bg-linear-to-r from-purple-400 to-pink-500 opacity-0 group-hover:opacity-100 blur-md transition-all duration-500"></span>
+          <span className="relative z-10 flex justify-center items-center gap-2">
+            <Crown /> Játékmester
+          </span>
+        </button>
+
+        <button onClick={() => navigate("/player")} className="relative w-full px-8 py-3 text-lg font-semibold text-white rounded-lg overflow-hidden group bg-linear-to-r from-indigo-500 to-purple-600 hover:from-purple-600 hover:to-indigo-500 transition-all duration-500">
+          <span className="absolute inset-0 w-full h-full bg-linear-to-r from-purple-400 to-pink-500 opacity-0 group-hover:opacity-100 blur-md transition-all duration-500"></span>
+          <span className="relative z-10 flex justify-center items-center gap-2">
+            <Joystick /> Játékos
+          </span>
+        </button>
+
+        <Button onClick={() => navigate("/logout")} variant="destructive" className="w-full sm:w-40 sm:absolute sm:top-6 sm:right-6 text-lg py-3 hover:bg-red-800">
+          Kilépés
+        </Button>
+      </div>
+    </div>
+  )
+}

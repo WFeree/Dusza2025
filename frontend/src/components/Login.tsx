@@ -119,10 +119,10 @@ export function Login() {
               />
 
               <Button className="w-full" type="submit">Bejelentkezés</Button>
-              <CardAction className="flex w-full justify-center items-center gap-1">
-                  <p className="text-sm text-muted-foreground">Nincs még fiókod?</p>
-                  <a href="#" className="p-0 h-auto">Regisztrálj</a>
-              </CardAction>
+              <FormItem className="flex w-full justify-center items-center gap-1">
+                <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
+                <Button onClick={() => navigate("/register")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
+            </FormItem>
             </form>
           </Form>
       </Card>

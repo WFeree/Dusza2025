@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute"
 import Register from "./components/Register"
 import { Login } from "./components/Login"
 import { NotFound } from './components/NotFound'
+import { Home } from './components/Home'
 
 function Logout() {
   localStorage.clear()
@@ -24,7 +25,7 @@ const App = () => {
           <Route path="/"
             element={
               <ProtectedRoute>
-                {/*<Home />*/}
+                <Home />
                 <h1>Home Page</h1>
               </ProtectedRoute>
             }
