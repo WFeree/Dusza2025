@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { set, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UserIcon, EyeIcon, EyeClosedIcon, LockIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants"
+import { Navigate, useNavigate } from "react-router-dom"
+import api from "@/api"
+import { useState } from "react"
 import {
   Form,
   FormControl,
@@ -18,7 +22,7 @@ import {
 } from "@/components/ui/input-group"
 import { Card } from "@/components/ui/card"
 
-const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])$/;
+const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 const formSchema = z.object({
   username: z.string().min(2,{
     message: "A felhasználónévnek minimum 2 karakterből kell állnia."
@@ -48,6 +52,9 @@ const formSchema = z.object({
 });
 
 export default function Register(){
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,8 +63,20 @@ export default function Register(){
       confirmPassword: ""
     },
   })
-  function onSubmit(data: z.infer<typeof formSchema>){
-    // send to backend
+  async function onSubmit(data: z.infer<typeof formSchema>){
+    setLoading(true);
+    try {
+      const res = await api.post("/api/user/register/", {
+        "username": data.username,
+        "password": data.password
+      })
+      navigate("/login");
+    } catch (error) {
+      alert("Hiba történt a regisztráció során.") 
+    } finally {
+      setLoading(false);
+    }
+
   }
   return(
     <div className="w-full min-h-screen flex justify-center items-center">
@@ -118,7 +137,7 @@ export default function Register(){
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Bejelentkezés</Button>
+            <Button className="w-full" type="submit">Regisztráció</Button>
           </form>
         </Form>
       </Card>

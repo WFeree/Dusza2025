@@ -3,9 +3,8 @@ import { jwtDecode } from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "@/constants";
 import React, { useEffect, useState } from "react";
-import { Flashlight } from "lucide-react";
 
-const ProtectedRoute = (children: React.ReactNode) => {
+const ProtectedRoute = (props: {children: React.ReactNode}) => {
     const [isAuthorized, setIstAuthorized] = useState<boolean | null>(null) 
 
     useEffect(() => {
@@ -54,7 +53,7 @@ const ProtectedRoute = (children: React.ReactNode) => {
         </div>)
     }
 
-    return isAuthorized ? children : <Navigate to="/login"/>
+    return isAuthorized ? props.children : <Navigate to="/login"/>
 }
 
 export default ProtectedRoute
