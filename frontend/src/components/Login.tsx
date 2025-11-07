@@ -15,6 +15,7 @@ import { EyeIcon, EyeClosedIcon } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "@/api"
+import { is } from "zod/v4/locales"
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 const formSchema = z.object({
@@ -119,10 +120,13 @@ export function Login() {
               />
 
               <Button className="w-full" type="submit">Bejelentkezés</Button>
+
+              {loading && <div>Betöltés...</div>}
+
               <FormItem className="flex w-full justify-center items-center gap-1">
                 <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
-                <Button onClick={() => navigate("/register")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
-            </FormItem>
+                <Button onClick={() => navigate("/register")} variant="link" className="p-0 h-auto">Regisztrálj!</Button>
+              </FormItem>
             </form>
           </Form>
       </Card>
