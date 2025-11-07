@@ -1,9 +1,9 @@
-import './App.css'
+import Register from "./components/Register"
 
-function App() {
-
+const App = () => {
   return (
     <>
+      <Register/>
     </>
   )
 }
