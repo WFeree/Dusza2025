@@ -9,6 +9,9 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 import { LockIcon, UserIcon } from "lucide-react"
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import api from "@/api"
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])$/;
 const formSchema = z.object({
@@ -28,8 +31,25 @@ const formSchema = z.object({
 });
 
 export function Login() {
+  const navigate = useNavigate();
     function onSubmit(data: z.infer<typeof formSchema>){
-        // send to backend
+    const [loading, setLoading] = useState(false);
+
+    async function onSubmit(data: z.infer<typeof formSchema>){
+      setLoading(true);
+    try {
+      const res = await api.post("/api/token/", {
+        "username": data.username,
+        "password": data.password
+      })
+      navigate("/home");
+    } catch (error) {
+      alert("Hiba történt a bejelentkezes során.") 
+    } finally {
+      setLoading(false);
+    }
+
+  }
     }
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -86,7 +106,7 @@ export function Login() {
             </form>
             <FormItem className="flex w-full justify-center items-center gap-1">
                 <FormLabel className="text-sm text-muted-foreground">Nincs még fiókod?</FormLabel>
-                <Button variant="link" className="p-0 h-auto">Regisztrálj</Button>
+                <Button onClick={() => navigate("/register")} variant="link" className="p-0 h-auto">Regisztrálj</Button>
             </FormItem>
             </Form>
       </Card>
