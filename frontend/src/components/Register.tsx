@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+
 import { UserIcon, EyeIcon, EyeClosedIcon, LockIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,8 +16,11 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
+  InputGroupButton,
 } from "@/components/ui/input-group"
-import { Card } from "@/components/ui/card"
+import { Card, CardAction } from "@/components/ui/card"
+import { useState } from "react"
+
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])$/;
 const formSchema = z.object({
@@ -48,6 +52,9 @@ const formSchema = z.object({
 });
 
 export default function Register(){
+  const [isPVisible, setPIsVisible] = useState(false);
+  const [isPCVisible, setPCIsVisible] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +67,8 @@ export default function Register(){
     // send to backend
   }
   return(
-    <div className="w-full min-h-screen flex justify-center items-center">
+    <div className="w-full min-h-screen flex flex-col justify-center items-center">
+      <h1 className="text-2xl font-bold pb-6">Damareen - Regisztráció</h1>
       <Card className="p-8 w-[90%] max-w-[500px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
@@ -82,6 +90,7 @@ export default function Register(){
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
@@ -90,16 +99,27 @@ export default function Register(){
                   <FormLabel>Jelszó</FormLabel>
                   <FormControl>
                     <InputGroup>
-                      <InputGroupInput type="password" {...field}/>
+                      <InputGroupInput type={isPVisible ? 'text' : 'password'} className="pr-9" {...field}/>
+                      <InputGroupButton
+                        variant='ghost'
+                        size="xs"
+                        onClick={() => setPIsVisible(prevState => !prevState)}
+                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'
+                      ></InputGroupButton>
                       <InputGroupAddon>
                         <LockIcon/>
                       </InputGroupAddon>
+                      {isPVisible ? 
+                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
+                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
+                      }
                     </InputGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -108,17 +128,32 @@ export default function Register(){
                   <FormLabel>Jelszó megerősítése</FormLabel>
                   <FormControl>
                     <InputGroup>
-                      <InputGroupInput type="password" {...field}/>
+                      <InputGroupInput type={isPCVisible ? 'text' : 'password'} className="pr-9" {...field}/>
+                      <InputGroupButton
+                        variant='ghost'
+                        size="xs"
+                        onClick={() => setPCIsVisible(prevState => !prevState)}
+                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'>
+                      </InputGroupButton>
                       <InputGroupAddon>
                         <LockIcon/>
                       </InputGroupAddon>
+                      {isPCVisible ? 
+                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
+                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
+                      }
                     </InputGroup>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Bejelentkezés</Button>
+
+            <Button className="w-full" type="submit">Regisztráció</Button>
+            <CardAction className="flex w-full justify-center items-center gap-1">
+                <p className="text-sm text-muted-foreground">Van már fiókod?</p>
+                <a href="" className="p-0 h-auto hover:underline">Jelentkezz be</a>
+              </CardAction>
           </form>
         </Form>
       </Card>
