@@ -69,7 +69,7 @@ export default function Register(){
   return(
     <div className="w-full min-h-screen flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold pb-6">Damareen - Regisztráció</h1>
-      <Card className="p-8 w-[90%] max-w-[500px]">
+      <Card className="p-6 w-[90%] max-w-[500px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <FormField

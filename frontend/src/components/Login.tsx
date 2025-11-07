@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import {
-  Card
+  Card,
+  CardAction
 } from "@/components/ui/card"
 import { useForm } from "react-hook-form"
 import { Form } from "@/components/ui/form"
@@ -42,66 +43,66 @@ export function Login() {
         },
     })
   return (
-    <div className="flex-col flex items-center justify-center min-h-screen bg-background">
-        <h1 className="text-2xl font-bold pb-6">Damareen - Bejelentkezés</h1>
-        <Card className="p-8 w-[90%] max-w-[450px]">
-            
-            <Form {...form}>
+    <div className="w-full min-h-screen flex flex-col items-center justify-center ">
+      <h1 className="text-2xl font-bold pb-6">Damareen - Bejelentkezés</h1>
+        <Card className="p-6 w-[90%] max-w-[500px]">
+          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-                <FormField
+              <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Felhasználónév</FormLabel>
-                    <FormControl>
-                        <InputGroup>
-                        <InputGroupInput autoComplete="none" {...field}/>
-                        <InputGroupAddon>
-                            <UserIcon/>
-                        </InputGroupAddon>
-                        </InputGroup>
-                    </FormControl>
-                    <FormMessage/>
-                    </FormItem>
-                )}
-                />
-                <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Jelszó</FormLabel>
+                  <FormItem>
+                  <FormLabel>Felhasználónév</FormLabel>
                   <FormControl>
                     <InputGroup>
-                      <InputGroupInput type={isPVisible ? 'text' : 'password'} className="pr-9" {...field}/>
-                      <InputGroupButton
-                        variant='ghost'
-                        size="xs"
-                        onClick={() => setPIsVisible(prevState => !prevState)}
-                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'
-                      ></InputGroupButton>
-                      <InputGroupAddon>
-                        <LockIcon/>
-                      </InputGroupAddon>
-                      {isPVisible ? 
-                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
-                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
-                      }
+                    <InputGroupInput autoComplete="none" {...field}/>
+                    <InputGroupAddon>
+                      <UserIcon/>
+                    </InputGroupAddon>
                     </InputGroup>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-                <Button className="w-full" type="submit">Bejelentkezés</Button>
-                
+                  <FormMessage/>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Jelszó</FormLabel>
+                    <FormControl>
+                      <InputGroup>
+                        <InputGroupInput type={isPVisible ? 'text' : 'password'} className="pr-9" {...field}/>
+                        <InputGroupButton
+                          variant='ghost'
+                          size="xs"
+                          onClick={() => setPIsVisible(prevState => !prevState)}
+                          className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'
+                        ></InputGroupButton>
+                        <InputGroupAddon>
+                          <LockIcon/>
+                        </InputGroupAddon>
+                        {isPVisible ? 
+                        <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
+                        <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
+                        }
+                      </InputGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button className="w-full" type="submit">Bejelentkezés</Button>
+              <CardAction className="flex w-full justify-center items-center gap-1">
+                  <p className="text-sm text-muted-foreground">Nincs még fiókod?</p>
+                  <a href="#" className="p-0 h-auto">Regisztrálj</a>
+              </CardAction>
             </form>
-            <FormItem className="flex w-full justify-center items-center gap-1">
-                <FormLabel className="text-sm text-muted-foreground">Nincs még fiókod?</FormLabel>
-                <Button variant="link" className="p-0 h-auto">Regisztrálj</Button>
-            </FormItem>
-            </Form>
+          </Form>
       </Card>
     </div>
   )
