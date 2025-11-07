@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants"
 import { useNavigate } from "react-router-dom"
 import api from "@/api"
-import { useState } from "react"
 import {
   Form,
   FormControl,
@@ -169,11 +168,11 @@ export default function Register(){
             />
 
             <Button className="w-full" type="submit">Regisztráció</Button>
-            <CardAction className="flex w-full justify-center items-center gap-1">
-                <p className="text-sm text-muted-foreground">Van már fiókod?</p>
-                <a href="" className="p-0 h-auto hover:underline">Jelentkezz be</a>
-              </CardAction>
           </form>
+            <FormItem className="flex w-full justify-center items-center gap-1">
+                <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
+                <Button onClick={() => navigate("/login")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
+            </FormItem>
         </Form>
       </Card>
     </div>
