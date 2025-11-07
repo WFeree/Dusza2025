@@ -1,0 +1,5 @@
+venv/
+backend/backend/__pycache__/
+backend/damareen/__pycache__/
+backend/damareen/migrations/__pycache__/
+frontend/node_modules/
