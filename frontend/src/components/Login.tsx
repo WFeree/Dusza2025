@@ -5,10 +5,11 @@ import {
 import { useForm } from "react-hook-form"
 import { Form } from "@/components/ui/form"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupButton } from "./ui/input-group"
 import { LockIcon, UserIcon } from "lucide-react"
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { EyeIcon, EyeClosedIcon } from "lucide-react"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "@/api"
@@ -31,6 +32,7 @@ const formSchema = z.object({
 });
 
 export function Login() {
+  const [isPVisible,setPIsVisible] = useState(false)
   const navigate = useNavigate();
     function onSubmit(data: z.infer<typeof formSchema>){
     const [loading, setLoading] = useState(false);
@@ -84,23 +86,33 @@ export function Login() {
                 )}
                 />
                 <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Jelszó</FormLabel>
-                    <FormControl>
-                        <InputGroup>
-                        <InputGroupInput type="password" {...field}/>
-                        <InputGroupAddon>
-                            <LockIcon/>
-                        </InputGroupAddon>
-                        </InputGroup>
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Jelszó</FormLabel>
+                  <FormControl>
+                    <InputGroup>
+                      <InputGroupInput type={isPVisible ? 'text' : 'password'} className="pr-9" {...field}/>
+                      <InputGroupButton
+                        variant='ghost'
+                        size="xs"
+                        onClick={() => setPIsVisible(prevState => !prevState)}
+                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'
+                      ></InputGroupButton>
+                      <InputGroupAddon>
+                        <LockIcon/>
+                      </InputGroupAddon>
+                      {isPVisible ? 
+                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
+                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
+                      }
+                    </InputGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
                 <Button className="w-full" type="submit">Bejelentkezés</Button>
                 
             </form>
