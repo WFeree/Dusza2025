@@ -10,9 +10,9 @@ DUNGEON_TYPES = {
 }
 
 class Dungeon(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
-    cards = models.ManyToManyField(Card, related_name='dungeon_cards', blank=False)
-    dungeonType = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(3)], choices=DUNGEON_TYPES, blank=False)
-    boss = models.ForeignKey(Card, null=True, on_delete=models.CASCADE, related_name='dungeon_boss', blank=False)
-    extra = models.BooleanField(default=False, blank=False)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=True)
+    cards = models.ManyToManyField(Card, related_name='dungeon_cards', blank=True)
+    dungeonType = models.IntegerField(choices=DUNGEON_TYPES, blank=True)
+    boss = models.ForeignKey(Card, null=True, on_delete=models.CASCADE, related_name='dungeon_boss', blank=True)
+    extra = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)

@@ -22,7 +22,11 @@ const buttonVariants = cva(
         water:"bg-blue-600 text-white hover:bg-blue-700",
         fire: "bg-red-600 text-white hover:bg-red-700",
         earth: "bg-green-600 text-white hover:bg-green-700 ",
+        simple: "bg-blue-600 text-white border-blue-700 shadow-md shadow-blue-500/30",
+        small: "bg-green-600 text-white border-green-700 shadow-md shadow-green-500/30",
+        large: "bg-red-700 text-white border-purple-800 shadow-md shadow-purple-500/30",
         destructive_outline:"bg-white text-red-500 border border-red-500 hover:bg-red-500 hover:text-white"
+
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

@@ -7,6 +7,8 @@ import { Login } from "./components/Login"
 import { NotFound } from './components/NotFound'
 import { Home } from './components/Home'
 import GMCardCreation  from "./components/GMCardCreation"
+import GMDungeonCreation from "./components/GMDungeonCreation"
+import DungeonCardSelector from "./components/DungeonCardSelector"
 import GMCardList  from "./components/GMCardList"
 
 function Logout() {
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="/logout" element={<Logout />}/>
           <Route path="/register" element={ <RegisterAndLogout />}/>
           <Route path="/card" element={<ProtectedRoute><GMCardCreation/></ProtectedRoute> }/>
+          <Route path="/dungeon" element={ <GMDungeonCreation />}/>
+          <Route path="/cardselector" element={ <DungeonCardSelector />}/>
           <Route path="/cardlist" element={ <GMCardList />}/>
           <Route path="*" element={ <NotFound />}/>
         </Routes>

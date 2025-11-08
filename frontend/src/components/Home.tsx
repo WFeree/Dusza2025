@@ -33,7 +33,7 @@ export function Home() {
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[215px] bg-background/90 backdrop-blur-sm border border-border">
-            <DropdownMenuItem onClick={() => navigate("/kazamata")} className="cursor-pointer">Kazamata létrehozása</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/dungeon")} className="cursor-pointer">Kazamata létrehozása</DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate("/card")} className="cursor-pointer">Kártya létrehozása</DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate("/cardlist")} className="cursor-pointer">Kártyák megtekintése</DropdownMenuItem>
           </DropdownMenuContent>
