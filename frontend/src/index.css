@@ -5,6 +5,7 @@
 body.no-scroll {
   overflow: hidden !important;
 }
+
 @tailwind utilities;
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -132,4 +133,7 @@ body{
 #root{
   width: 100%;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
