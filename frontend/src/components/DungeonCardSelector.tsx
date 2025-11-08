@@ -108,7 +108,12 @@ const DungeonCardSelector = () => {
 
       <div className="flex flex-col md:flex-row gap-8">
         <div className='flex-1'>
-          <h2 className="text-lg font-semibold mb-2">Kiválasztott kártyák</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-semibold mb-2">Kiválasztott kártyák</h2>
+            <Button onClick={handleSave}>
+              Mentés
+            </Button>
+          </div>
           <Separator className="mb-4" />
           {selectedCards.length === 0 ? (
             <p className="text-muted-foreground">Nincs kiválasztott kártya.</p>
