@@ -9,9 +9,9 @@ CARD_TYPES = {
 }
 
 class Card(models.Model):
-    name = models.CharField(max_length=100, unique=True, blank=False)
-    damage = models.IntegerField(blank=False, validators=[MinValueValidator(2), MaxValueValidator(100)])
-    health = models.IntegerField(blank=False, validators=[MinValueValidator(2), MaxValueValidator(100)])
-    affinity = models.IntegerField(choices=CARD_TYPES, blank=False)
-    color = models.CharField(max_length=7, blank=False)
+    name = models.CharField(max_length=100, blank=True)
+    damage = models.IntegerField(blank=True)
+    health = models.IntegerField(blank=True)
+    affinity = models.IntegerField(choices=CARD_TYPES, blank=True)
+    color = models.CharField(blank=True) 
 

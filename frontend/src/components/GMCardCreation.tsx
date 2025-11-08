@@ -6,6 +6,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { SwordIcon, HeartIcon, EyeIcon, ChevronLeft } from "lucide-react"
 import api from "@/api"
+import { AxiosError } from "axios"
+import { set } from "zod"
 import { useNavigate } from "react-router-dom"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
@@ -23,12 +25,12 @@ const CardTypes: CardTypesType = {
 export default function CardCreator() {
   const navigate = useNavigate()
   const [color, setColor] = useState("#0084d1")
-  const [title, setTitle] = useState("Queen of the Dead")
+  const [title, setTitle] = useState("")
   const [damage, setDamage] = useState(2)
   const [health, setHealth] = useState(2)
-  const [type, setType] = useState("water")
+  const [type, setType] = useState("waterwater")
   const [loading, setLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string>()
   const [showError, setShowError] = useState(false)
 
   useEffect(() => {
@@ -36,41 +38,36 @@ export default function CardCreator() {
     return () => document.body.classList.remove("no-scroll")
   }, [])
 
-  const handleSubmit = async (redirectTo?: string) => {
-    setLoading(true)
-    setErrorMessage(null)
-    setShowError(false)
+  const handleSubmit = async () => {
+      setLoading(true);
+      try {
+        const res = await api.post("/game/cards/", {
+          "name": title,
+          "damage": damage,
+          "health": health,
+          "affinity": CardTypes[type],
+          "color": color,
+        })
+        
 
-    try {
-      const res = await api.post("/game/cards/", {
-        name: title,
-        damage: damage,
-        health: health,
-        affinity: CardTypes[type],
-        color: color,
-      })
-
-      if (res.status === 201 || res.status === 200) {
-        // ✅ Success
-        if (redirectTo === "cardlist") {
-          navigate("/cardlist")
-        } else if (redirectTo === "reload") {
-          window.location.reload()
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.log(error.response?.data);
+          let newMessage = "";
+          for (var key in error.response?.data) {
+            newMessage += error.response?.data[key];
+            console.log(key, error.response?.data[key]);
+          }
+          console.log(newMessage);
+          setErrorMessage(newMessage);
+        } else {
+          setErrorMessage("Hiba történt a kártya létrehozásakor.");
         }
+      } finally {
+        setLoading(false);
+        navigate("/cardlist");
       }
-    } catch (error: unknown) {
-      // ❌ Error
-      const message =
-        typeof error === "string"
-          ? error
-          : error instanceof Error
-          ? error.message
-          : JSON.stringify(error)
-      setErrorMessage(message)
-      setShowError(true)
-    } finally {
-      setLoading(false)
-    }
+  
   }
 
   return (
@@ -183,69 +180,39 @@ export default function CardCreator() {
           </div>
         </div>
 
-        <div className="flex-1">
-          <Label className="pb-2 text-white">Kártya</Label>
-          <Card>
-            <CardHeader>
-              <div
-                className="w-full h-[100px] rounded-md"
-                style={{ backgroundColor: color }}
-              ></div>
-              <CardTitle className="font-bold text-xl">
-                {title || "Névtelen kártya"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex justify-around gap-4">
-              <CardDescription className="text-md text-black flex gap-2 items-center">
-                <SwordIcon strokeWidth={1.5} size={18} />
-                Sebzés: {damage}
-              </CardDescription>
-              <CardDescription className="text-md text-black flex gap-2 items-center">
-                <HeartIcon strokeWidth={1.5} size={18} />
-                Életerő: {health}
-              </CardDescription>
-            </CardContent>
-            <CardContent className="pb-8">
-              <div
-                className={`w-full h-[50px] rounded-md flex items-center justify-center text-black font-semibold border transition-all duration-200
-                  ${type === "" ? "text-black border border-gray-200 bg-transparent" : ""}
-                  ${type === "water" ? "bg-blue-600 text-white" : ""}
-                  ${type === "fire" ? "bg-red-500 text-white" : ""}
-                  ${type === "air" ? "bg-white" : ""}
-                  ${type === "earth" ? "bg-green-600 text-white" : ""}
-                `}
-              >
-                {type === ""
-                  ? "Nincs típus"
-                  : type === "water"
-                  ? "Víz típus"
-                  : type === "fire"
-                  ? "Tűz típus"
-                  : type === "air"
-                  ? "Levegő típus"
-                  : "Föld típus"}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <div className="flex-1">
+        <h2 className="text-xl font-semibold mb-4">Kártya előnézet</h2>
+        <Separator className="mb-4"/>
+        <Label className="pb-2 text-white">Kártya</Label>
+        <Card>
+          <CardHeader>
+            <div className="w-full h-[100px] rounded-md" style={{ backgroundColor: color }}></div>
+            <CardTitle className="font-bold text-xl">{title || "Névtelen kártya"}</CardTitle>
+          </CardHeader>
+          <CardContent className="flex justify-around gap-4">
+            <CardDescription className="text-md text-black flex gap-2 items-center">{<SwordIcon strokeWidth={1.5} size={18}/>}Sebzés: {damage}</CardDescription>
+            <CardDescription className="text-md text-black flex gap-2 items-center">{<HeartIcon strokeWidth={1.5} size={18}/>}Életerő: {health}</CardDescription>
+          </CardContent>
+          <CardContent className="pb-8">
+            <div
+              className={`w-full h-[50px] rounded-md flex items-center justify-center text-black font-semibold border transition-all duration-200
+                ${type === "water" ? "bg-blue-600 text-white" : ""}
+                ${type === "fire" ? "bg-red-500 text-white" : ""}
+                ${type === "air" ? "bg-white" : ""}
+                ${type === "earth" ? "bg-green-600 text-white" : ""}
+              `}
+            >
+              {type === "water" ? "Víz típus" : type === "fire" ? "Tűz típus" : type === "air" ? "Levegő típus" : "Föld típus"}
+            </div>
+          </CardContent>
+        </Card>
       </div>
-
-      <div className="flex justify-center gap-4">
-        <Button
-          disabled={loading}
-          onClick={() => handleSubmit("cardlist")}
-        >
-          Mentés
-        </Button>
-
-        <Button
-          disabled={loading}
-          variant={"outline"}
-          onClick={() => handleSubmit("reload")}
-        >
-          Mentés és új kártya létrehozása
-        </Button>
-      </div>
+    </div>
+    <div className="flex justify-center gap-4">
+      <Button type="submit" onClick={() => handleSubmit()}>Mentés</Button>
+      <div className="text-red-600">{<p>{errorMessage}</p>}</div>
+      {loading && <p>Mentés folyamatban...</p>}
+    </div>
     </>
   )
 }

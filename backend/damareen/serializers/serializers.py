@@ -11,9 +11,39 @@ class CardSerializer(serializers.ModelSerializer):
         extra_kwargs = {'id': {'read_only': True}}
 
     def validate_name(self, value):
-        print("Validating card name:", value)
+        if value is None or value.strip() == "":
+            raise serializers.ValidationError("A név mező nem lehet üres.")
         if Card.objects.filter(name=value).exists():
             raise serializers.ValidationError("Már létezik ilyen nevű kártya.")
+        return value
+
+    def validate_affinity(self, value):
+        print(value)
+        if not value:
+            raise serializers.ValidationError("Az affinitás mező nem lehet üres.")
+        return value
+
+    def validate_health(self, value):
+        if value is None:
+            raise serializers.ValidationError("A életerő mező nem lehet üres.")
+            
+        if value < 2 or value > 100:
+            raise serializers.ValidationError("A életerő mező értéke 2 és 100 között kell legyen.")
+        return value    
+
+    def validate_damage(self, value):
+        if value is None:
+            raise serializers.ValidationError("A sebzés mező nem lehet üres.")
+            
+        if value < 2 or value > 100:
+            raise serializers.ValidationError("A sebzés mező értéke 2 és 100 között kell legyen.")
+        return value    
+    
+    def validate_color(self, value):
+        if value is None or value.strip() == "":
+            raise serializers.ValidationError("A szín mező nem lehet üres.")
+        if len(value) != 7 or not value.startswith('#'):
+            raise serializers.ValidationError("A szín mezőnek érvényes hex kódnak kell lennie (pl. #FFFFFF).")
         return value
 
 class DungeonSerializer(serializers.ModelSerializer):
