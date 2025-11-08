@@ -7,7 +7,7 @@ from ..models.PlayerCard import PlayerCard
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['id', 'name', 'damage', 'health', 'affinity']
+        fields = ['id', 'name', 'damage', 'health', 'affinity', 'color']
         extra_kwargs = {'id': {'read_only': True}}
 
     def validate_name(self, value):
