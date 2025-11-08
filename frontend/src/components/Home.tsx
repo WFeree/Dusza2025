@@ -9,12 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useEffect } from "react"
 
 export function Home() {
   const navigate = useNavigate()
 
+  useEffect(() => {
+    document.body.classList.add("no-scroll")
+    return () => document.body.classList.remove("no-scroll")
+  }, [])
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4 gap-8 ">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4 gap-8">
       <h1 className="text-3xl font-bold text-center">Üdvözöllek a Damareen játékban!</h1>
       <h3 className="text-lg text-muted-foreground text-center">Válassz szerepkört!</h3>
 

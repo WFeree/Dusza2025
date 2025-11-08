@@ -1,6 +1,9 @@
 *{
   margin: 0;padding: 0;box-sizing: border-box;
-  @apply overflow-hidden;
+}
+
+body.no-scroll {
+  overflow: hidden !important;
 }
 
 @tailwind utilities;
