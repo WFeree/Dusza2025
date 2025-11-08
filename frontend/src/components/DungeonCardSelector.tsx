@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useLocation } from "react-router-dom"
+import { SwordIcon, HeartIcon } from "lucide-react"
 
 type GameCard = {
   id: number
@@ -114,17 +115,29 @@ const DungeonCardSelector = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {selectedCards.map(card => (
-                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border border-blue-500 bg-blue-100 transition hover:bg-blue-200">
-                  <div className="h-2 w-full rounded-t-md" style={{ backgroundColor: card.color }}></div>
-                  <CardHeader>
-                    <CardTitle>{card.name}</CardTitle>
-                  </CardHeader> 
-                  <CardContent className="text-sm text-muted-foreground">
-                    Sebzés: {card.damage}
-                    Élet: {card.health}
-                    Típus: {getAffinityName(card.affinity)}
-                    
-                  </CardContent>              
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border border-blue-500 bg-blue-100 transition hover:bg-blue-200 transition p-3">
+                  <CardTitle className="font-bold text-xl">{card.name}</CardTitle>
+                  <div className="text-md text-black flex gap-2 items-center">
+                    <SwordIcon strokeWidth={1.5} size={18} /> Sebzés: {card.damage}
+                  </div>   
+                  <div className="text-md text-black flex gap-2 items-center">
+                    <HeartIcon strokeWidth={1.5} size={18} /> Életerő: {card.health}
+                  </div>         
+                  <div
+                    className={`w-full h-[30px] rounded-md flex items-center justify-center text-black font-semibold border transition-all duration-200
+                    ${Number(card.affinity) === 1 ? "bg-red-500 text-white" : ""}
+                    ${Number(card.affinity) === 2 ? "bg-green-600 text-white" : ""}
+                    ${Number(card.affinity) === 3 ? "bg-blue-600 text-white" : ""}
+                    ${Number(card.affinity) === 4 ? "bg-white" : ""}
+                  `}>
+                    {Number(card.affinity) === 3
+                      ? "Víz típus"
+                      : Number(card.affinity) === 1
+                      ? "Tűz típus"
+                      : Number(card.affinity) === 4
+                      ? "Levegő típus"
+                      : "Föld típus"}
+                  </div>
                 </Card>
               ))}
             </div>
@@ -138,16 +151,30 @@ const DungeonCardSelector = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {cards.map(card => (
-                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border transition hover:border-gray-400">
-                  <div  className="h-2 w-full rounded-t-md" style={{ backgroundColor: card.color }}></div>
-                  <CardHeader>
-                    <CardTitle>{card.name}</CardTitle>
-                  </CardHeader> 
-                  <CardContent className="text-sm text-foreground">
-                    Sebzés: {card.damage}
-                    Élet: {card.health}
-                    Típus: {getAffinityName(card.affinity)}
-                  </CardContent>              
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border transition hover:border-gray-400 transition p-3">
+                  <CardTitle className="font-bold text-xl">{card.name}</CardTitle>  
+                  <div className="text-md text-black flex gap-2 items-center">
+                    <SwordIcon strokeWidth={1.5} size={18} /> Sebzés: {card.damage}
+                  </div>  
+                  <div className="text-md text-black flex gap-2 items-center">
+                    <HeartIcon strokeWidth={1.5} size={18} /> Életerő: {card.health}
+                  </div>  
+                  <div
+                    className={`w-full h-[30px] rounded-md flex items-center justify-center text-black font-semibold border transition-all duration-200
+                      ${Number(card.affinity) === 1 ? "bg-red-500 text-white" : ""}
+                      ${Number(card.affinity) === 2 ? "bg-green-600 text-white" : ""}
+                      ${Number(card.affinity) === 3 ? "bg-blue-600 text-white" : ""}
+                      ${Number(card.affinity) === 4 ? "bg-white" : ""}
+                  `}
+                  >
+                    {Number(card.affinity) === 3
+                      ? "Víz típus"
+                      : Number(card.affinity) === 1
+                      ? "Tűz típus"
+                      : Number(card.affinity) === 4
+                      ? "Levegő típus"
+                      : "Föld típus"}
+                  </div>          
                 </Card>
               ))}
             </div>

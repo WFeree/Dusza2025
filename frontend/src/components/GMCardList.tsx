@@ -117,7 +117,7 @@ const GMCardList = () => {
 
         <Select
           value={affinityFilter}
-          onValueChange={(value) => setAffinityFilter(value)}
+          onValueChange={(value: string) => setAffinityFilter(value)}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Típus szűrés" />
