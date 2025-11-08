@@ -6,7 +6,7 @@ import Register from "./components/Register"
 import { Login } from "./components/Login"
 import { NotFound } from './components/NotFound'
 import { Home } from './components/Home'
-// import { GMCardCreation } from "./components/GMCardCreation"
+import GMCardCreation  from "./components/GMCardCreation"
 
 function Logout() {
   localStorage.clear()
@@ -34,6 +34,7 @@ const App = () => {
           <Route path="/login" element={<Login />}/>
           <Route path="/logout" element={<Logout />}/>
           <Route path="/register" element={ <RegisterAndLogout />}/>
+          <Route path="/card" element={ <GMCardCreation />}/>
           <Route path="*" element={ <NotFound />}/>
         </Routes>
       </BrowserRouter>

@@ -1,14 +1,9 @@
 *{
   margin: 0;padding: 0;box-sizing: border-box;
-  @apply overflow-hidden;
 }
-
 @tailwind utilities;
-
 @import "tailwindcss";
 @import "tw-animate-css";
-@tailwind utilities;
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

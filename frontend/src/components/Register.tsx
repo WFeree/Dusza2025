@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form"
 import { set, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
-import { UserIcon, EyeIcon, EyeClosedIcon, LockIcon } from "lucide-react"
+import { UserIcon, EyeIcon, EyeClosedIcon, LockIcon, CircleAlertIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants"
 import { useNavigate } from "react-router-dom"
@@ -21,9 +20,13 @@ import {
   InputGroupInput,
   InputGroupButton,
 } from "@/components/ui/input-group"
-import { Card, CardAction } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { useState } from "react"
-
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 const formSchema = z.object({
@@ -57,7 +60,7 @@ const formSchema = z.object({
 export default function Register(){
   const [isPVisible, setPIsVisible] = useState(false);
   const [isPCVisible, setPCIsVisible] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -77,14 +80,21 @@ export default function Register(){
         "password": data.password
       })
       navigate("/login");
-    } catch (error) {
-      alert("Hiba történt a regisztráció során.") 
+    } catch (error: unknown) {
+        const message =
+          typeof error === "string"
+            ? error
+            : error instanceof Error
+            ? error.message
+            : JSON.stringify(error);
+        setErrorMessage(message);
     } finally {
       setLoading(false);
     }
 
   }
   return(
+    <>
     <div className="w-full min-h-screen flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold pb-6">Damareen - Regisztráció</h1>
       <Card className="p-6 w-[90%] max-w-[500px]">
@@ -98,7 +108,7 @@ export default function Register(){
                   <FormLabel>Felhasználónév</FormLabel>
                   <FormControl>
                     <InputGroup>
-                      <InputGroupInput autoComplete="none" {...field}/>
+                      <InputGroupInput autoComplete="none" autoCorrect="none" {...field}/>
                       <InputGroupAddon>
                         <UserIcon/>
                       </InputGroupAddon>
@@ -122,15 +132,17 @@ export default function Register(){
                         variant='ghost'
                         size="xs"
                         onClick={() => setPIsVisible(prevState => !prevState)}
-                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'
-                      ></InputGroupButton>
+                        className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'>
+                      </InputGroupButton>
                       <InputGroupAddon>
                         <LockIcon/>
                       </InputGroupAddon>
-                      {isPVisible ? 
-                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
-                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
-                      }
+                      <InputGroupAddon align={"inline-end"}>
+                        {isPVisible ? 
+                        <EyeClosedIcon color="#737373"/> : 
+                        <EyeIcon color="#737373"/>
+                        }
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormControl>
                   <FormMessage />
@@ -154,12 +166,14 @@ export default function Register(){
                         className='text-muted-foreground mr-4 focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent'>
                       </InputGroupButton>
                       <InputGroupAddon>
-                        <LockIcon/>
+                          <LockIcon/>
                       </InputGroupAddon>
-                      {isPCVisible ? 
-                      <EyeClosedIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/> : 
-                      <EyeIcon color="#737373" size={18} strokeWidth={1.8} className="mr-4"/>
-                      }
+                      <InputGroupAddon align={"inline-end"}>
+                        {isPCVisible ? 
+                        <EyeClosedIcon color="#737373"/> : 
+                        <EyeIcon color="#737373"/>
+                        }
+                      </InputGroupAddon>
                     </InputGroup>
                   </FormControl>
                   <FormMessage />
@@ -169,20 +183,29 @@ export default function Register(){
 
             <Button className="w-full" type="submit">Regisztráció</Button>
 
+            <FormItem className="flex w-full justify-center items-center gap-1">
+                <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
+                <Button onClick={() => navigate("/login")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
+            </FormItem>
             {loading && (
               <div className="flex items-center justify-center">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-indigo-500"></div>
               </div>
             )}
-
-            <FormItem className="flex w-full justify-center items-center gap-1">
-                <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
-                <Button onClick={() => navigate("/login")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
-            </FormItem>
+            {errorMessage && (
+              <Alert variant="destructive">
+                <CircleAlertIcon className="h-4 w-4" />
+                <AlertTitle>Hiba történt a regisztráció során!</AlertTitle>
+                <AlertDescription>
+                  {errorMessage}
+                </AlertDescription>
+              </Alert>)}
           </form>
-            
         </Form>
       </Card>
     </div>
-  )
-}
+    <div>
+      
+    </div>
+    </>
+  )}
