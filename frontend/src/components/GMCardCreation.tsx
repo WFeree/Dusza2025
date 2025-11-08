@@ -5,14 +5,54 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { SwordIcon, HeartIcon } from "lucide-react"
+import { SwordIcon, HeartIcon, Car } from "lucide-react"
+import api from "@/api"
+
+interface CardTypesType {
+  [key: string]: number;
+}
+
+const CardTypes: CardTypesType = {
+  "fire": 1,
+  "earth": 2,
+  "water": 3,
+  "air": 4,
+}
 
 export default function CardCreator() {
   const [color, setColor] = useState("#0084d1")
   const [title, setTitle] = useState("Queen of the Dead")
   const [damage, setDamage] = useState(2)
-  const [health, setHealth] = useState(1)
+  const [health, setHealth] = useState(2)
   const [type, setType] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const handleSubmit = async () => {
+      setLoading(true);
+      try {
+        console.log(CardTypes[type]);
+        const res = await api.post("/game/cards/", {
+          "name": title,
+          "damage": damage,
+          "health": health,
+          "affinity": CardTypes[type],
+          "color": color,
+        })
+
+      } catch (error: unknown) {
+        const message =
+          typeof error === "string"
+            ? error
+            : error instanceof Error
+            ? error.message
+            : JSON.stringify(error);
+        setErrorMessage(message);
+      } finally {
+        setLoading(false);
+      }
+  
+  }
 
   return (
     <>
@@ -106,8 +146,7 @@ export default function CardCreator() {
       </div>
     </div>
     <div className="flex justify-center gap-4">
-      <Button type="submit">Mentés</Button>
-      <Button variant={"outline"} type="submit">Mentés és új kártya létrehozása</Button>
+      <Button type="submit" onClick={() => handleSubmit()}>Mentés</Button>
     </div>
     </>
   )

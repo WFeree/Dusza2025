@@ -27,14 +27,13 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Home />
-                <h1>Home Page</h1>
               </ProtectedRoute>
             }
           />
           <Route path="/login" element={<Login />}/>
           <Route path="/logout" element={<Logout />}/>
           <Route path="/register" element={ <RegisterAndLogout />}/>
-          <Route path="/card" element={ <GMCardCreation />}/>
+          <Route path="/card" element={<ProtectedRoute><GMCardCreation/></ProtectedRoute> }/>
           <Route path="*" element={ <NotFound />}/>
         </Routes>
       </BrowserRouter>
