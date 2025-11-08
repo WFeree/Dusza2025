@@ -114,6 +114,13 @@ const GMCardList = () => {
     setSortType((prev) => (prev === type ? "" : type));
   };
 
+  const deleteCard = (cardId: number) => {
+    api
+      .delete(`game/cards/delete/${cardId}`)
+
+      navigate(0);
+    }
+
   return (
     <>
       <div className="mt-2 mx-4 flex flex-col">
@@ -279,7 +286,7 @@ const GMCardList = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Mégse</AlertDialogCancel>
-                      <AlertDialogAction>Törlés</AlertDialogAction>
+                      <AlertDialogAction onClick={() => deleteCard(card.id)}>Törlés</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>     

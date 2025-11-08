@@ -7,7 +7,7 @@ from ..models.PlayerCard import PlayerCard
 class CardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
-        fields = ['id', 'name', 'damage', 'health', 'affinity', 'color']
+        fields = ['id', 'name', 'damage', 'health', 'affinity']
         extra_kwargs = {'id': {'read_only': True}}
 
     def validate_name(self, value):
@@ -38,13 +38,6 @@ class CardSerializer(serializers.ModelSerializer):
         if value < 2 or value > 100:
             raise serializers.ValidationError("A sebzés mező értéke 2 és 100 között kell legyen.")
         return value    
-    
-    def validate_color(self, value):
-        if value is None or value.strip() == "":
-            raise serializers.ValidationError("A szín mező nem lehet üres.")
-        if len(value) != 7 or not value.startswith('#'):
-            raise serializers.ValidationError("A szín mezőnek érvényes hex kódnak kell lennie (pl. #FFFFFF).")
-        return value
 
 class DungeonSerializer(serializers.ModelSerializer):
     class Meta:

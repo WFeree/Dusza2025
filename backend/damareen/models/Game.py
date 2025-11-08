@@ -4,4 +4,3 @@ from .Card import Card
 
 class Game(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
-    cards = models.ManyToManyField(Card, blank=False)
