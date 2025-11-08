@@ -7,6 +7,9 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { SwordIcon, HeartIcon, Car } from "lucide-react"
 import api from "@/api"
+import { AxiosError } from "axios"
+import { set } from "zod"
+import { useNavigate } from "react-router-dom"
 
 interface CardTypesType {
   [key: string]: number;
@@ -21,17 +24,17 @@ const CardTypes: CardTypesType = {
 
 export default function CardCreator() {
   const [color, setColor] = useState("#0084d1")
-  const [title, setTitle] = useState("Queen of the Dead")
+  const [title, setTitle] = useState("")
   const [damage, setDamage] = useState(2)
   const [health, setHealth] = useState(2)
-  const [type, setType] = useState("")
+  const [type, setType] = useState("water")
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string>()
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
       setLoading(true);
       try {
-        console.log(CardTypes[type]);
         const res = await api.post("/game/cards/", {
           "name": title,
           "damage": damage,
@@ -39,17 +42,24 @@ export default function CardCreator() {
           "affinity": CardTypes[type],
           "color": color,
         })
+        
 
-      } catch (error: unknown) {
-        const message =
-          typeof error === "string"
-            ? error
-            : error instanceof Error
-            ? error.message
-            : JSON.stringify(error);
-        setErrorMessage(message);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.log(error.response?.data);
+          let newMessage = "";
+          for (var key in error.response?.data) {
+            newMessage += error.response?.data[key];
+            console.log(key, error.response?.data[key]);
+          }
+          console.log(newMessage);
+          setErrorMessage(newMessage);
+        } else {
+          setErrorMessage("Hiba történt a kártya létrehozásakor.");
+        }
       } finally {
         setLoading(false);
+        navigate("/cardlist");
       }
   
   }
@@ -132,14 +142,13 @@ export default function CardCreator() {
           <CardContent className="pb-8">
             <div
               className={`w-full h-[50px] rounded-md flex items-center justify-center text-black font-semibold border transition-all duration-200
-                ${type === "" ? "text-black border border-gray-200 bg-transparent" : ""}
                 ${type === "water" ? "bg-blue-600 text-white" : ""}
                 ${type === "fire" ? "bg-red-500 text-white" : ""}
                 ${type === "air" ? "bg-white" : ""}
                 ${type === "earth" ? "bg-green-600 text-white" : ""}
               `}
             >
-              {type === "" ? "Nincs típus" : type === "water" ? "Víz típus" : type === "fire" ? "Tűz típus" : type === "air" ? "Levegő típus" : "Föld típus"}
+              {type === "water" ? "Víz típus" : type === "fire" ? "Tűz típus" : type === "air" ? "Levegő típus" : "Föld típus"}
             </div>
           </CardContent>
         </Card>
@@ -147,6 +156,8 @@ export default function CardCreator() {
     </div>
     <div className="flex justify-center gap-4">
       <Button type="submit" onClick={() => handleSubmit()}>Mentés</Button>
+      <div className="text-red-600">{<p>{errorMessage}</p>}</div>
+      {loading && <p>Mentés folyamatban...</p>}
     </div>
     </>
   )

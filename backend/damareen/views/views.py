@@ -11,6 +11,10 @@ class CardListCreate(generics.ListCreateAPIView):
     serializer_class = CardSerializer
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+
 class GameListCreate(generics.ListCreateAPIView):
     serializer_class = GameSerializer
     permission_classes = [IsAuthenticated]
