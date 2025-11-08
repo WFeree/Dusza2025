@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardTitle, CardDescription } from "./ui/card";
-import { SwordIcon, HeartIcon, SearchIcon } from "lucide-react";
+import { SwordIcon, HeartIcon, SearchIcon, PlusIcon, ChevronLeft } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -30,11 +30,6 @@ const GMCardList = () => {
   const [sortType, setSortType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [affinityFilter, setAffinityFilter] = useState<string>("all");
-
-  useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => document.body.classList.remove("no-scroll");
-  }, []);
 
   useEffect(() => {
     api
@@ -101,9 +96,9 @@ const GMCardList = () => {
     <>
       <div className="mt-2 mx-4 flex flex-col">
         <nav className="flex justify-between">
-          <Button onClick={() => navigate("/")}>Vissza a menübe</Button>
+          <Button onClick={() => navigate("/")}><ChevronLeft/>Vissza a menübe</Button>
           <h1 className="text-2xl font-semibold text-center mb-2">Kártyák</h1>
-          <Button variant={"outline"} onClick={() => navigate("/card")}>Kártya létrehozása</Button>
+          <Button variant={"outline"} onClick={() => navigate("/card")}><PlusIcon/>Kártya létrehozása</Button>
 
         </nav>
         <Separator />
@@ -176,15 +171,15 @@ const GMCardList = () => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-4 gap-x-4 gap-y-4 p-4">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4 p-4">
         {filteredData.length > 0 ? (
           filteredData.map((card) => (
             <Card key={card.id} className="CreatedCard p-2 w-full max-h-fit">
-              <div
+              {/* <div
                 id="color"
                 className="w-full h-[30px] rounded-md"
                 style={{ backgroundColor: card.color }}
-              ></div>
+              ></div> */}
 
               <CardTitle className="font-bold text-xl">{card.name}</CardTitle>
               <CardDescription className="text-md text-black flex gap-2 items-center">
