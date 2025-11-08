@@ -5,13 +5,9 @@
 body.no-scroll {
   overflow: hidden !important;
 }
-
 @tailwind utilities;
-
 @import "tailwindcss";
 @import "tw-animate-css";
-@tailwind utilities;
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
