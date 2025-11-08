@@ -11,6 +11,7 @@ class CardSerializer(serializers.ModelSerializer):
         extra_kwargs = {'id': {'read_only': True}}
 
     def validate_name(self, value):
+        print("Validating card name:", value)
         if Card.objects.filter(name=value).exists():
             raise serializers.ValidationError("Már létezik ilyen nevű kártya.")
         return value
