@@ -6,6 +6,7 @@ import Register from "./components/Register"
 import { Login } from "./components/Login"
 import { NotFound } from './components/NotFound'
 import { Home } from './components/Home'
+// import { GMCardCreation } from "./components/GMCardCreation"
 
 function Logout() {
   localStorage.clear()

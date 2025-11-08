@@ -1,5 +1,6 @@
 *{
   margin: 0;padding: 0;box-sizing: border-box;
+  @apply overflow-hidden;
 }
 
 @tailwind utilities;
@@ -64,7 +65,7 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(40.412% 0.15672 26.558);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);

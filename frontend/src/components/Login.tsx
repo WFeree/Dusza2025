@@ -119,9 +119,13 @@ export function Login() {
                 )}
               />
 
-              <Button className="w-full" type="submit">Bejelentkezés</Button>
+              <Button className="w-full" type="submit" >Bejelentkezés</Button>
 
-              {loading && <div>Betöltés...</div>}
+              {loading && (
+                <div className="flex items-center justify-center">
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-indigo-500"></div>
+                </div>
+              )}
 
               <FormItem className="flex w-full justify-center items-center gap-1">
                 <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
