@@ -33,8 +33,10 @@ export default function CardCreator() {
 
   return (
     <>
-    <Button onClick={() => navigate("/gameenvironment")}>Vissza</Button>
     <div className="flex flex-col md:flex-row gap-6 p-6">
+      <Button onClick={() => navigate("/gameenvironment")} className="absolute top-4 right-4 z-10">
+        Vissza
+      </Button>
       <div className="flex-1 space-y-4">
         <h2 className="text-xl font-semibold">Kazamata létrehozása</h2>
         <Separator />
