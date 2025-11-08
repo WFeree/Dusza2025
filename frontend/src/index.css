@@ -65,7 +65,7 @@ body.no-scroll {
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(40.412% 0.15672 26.558);
+  --destructive: oklch(53.643% 0.2119 26.975);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);

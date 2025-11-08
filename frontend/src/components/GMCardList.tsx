@@ -1,11 +1,33 @@
 import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardTitle, CardDescription } from "./ui/card";
-import { SwordIcon, HeartIcon, SearchIcon, PlusIcon, ChevronLeft } from "lucide-react";
+import { SwordIcon, HeartIcon, SearchIcon, PlusIcon, ChevronLeft, TrashIcon, ChevronRight } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label"
 import { useNavigate } from "react-router-dom"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Select,
   SelectTrigger,
@@ -171,10 +193,10 @@ const GMCardList = () => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4 p-4">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 p-4">
         {filteredData.length > 0 ? (
           filteredData.map((card) => (
-            <Card key={card.id} className="CreatedCard p-2 w-full max-h-fit">
+            <Card key={card.id} className="CreatedCard p-2 w-full max-h-fit min-w-[245px]">
               {/* <div
                 id="color"
                 className="w-full h-[30px] rounded-md"
@@ -205,6 +227,63 @@ const GMCardList = () => {
                   ? "Levegő típus"
                   : "Föld típus"}
               </div>
+              <div className="flex items-center justify-between">
+
+                <Dialog>
+                  <form onSubmit={()=>{}}>
+                    <DialogTrigger asChild>
+                      <Button variant={"secondary"} className="wrap-break-word">Vezér létrehozása</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Vezér létrehozása</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <div className="grid gap-3">
+                          <Label htmlFor="name">Név</Label>
+                          <Input id="name" defaultValue={card.name} />
+                        </div>
+                        <div className="grid gap-3">
+                          <Label htmlFor="username-1">Melyik képessége fejlődjön?</Label>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="hp">Életerő <ChevronRight/> {card.health * 2}</SelectItem>
+                              <SelectItem value="damage">Sebzés <ChevronRight/> {card.damage * 2}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Mégse</Button>
+                        </DialogClose>
+                        <Button type="submit">Vezér létrehozása</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </form>
+                </Dialog>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant={"destructive_outline"}><TrashIcon/>Törlés</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Biztosan törölni akarja?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Ez a művelet később nem visszavonható, véglegesen törölni fogja <strong>"{card.name}"</strong> kártyát.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Mégse</AlertDialogCancel>
+                      <AlertDialogAction>Törlés</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>     
+              </div>
             </Card>
           ))
         ) : (
@@ -218,3 +297,4 @@ const GMCardList = () => {
 };
 
 export default GMCardList;
+// TODO: Vezér + Delete functionality
