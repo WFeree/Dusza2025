@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardTitle, CardDescription } from "./ui/card";
-import { SwordIcon, HeartIcon, SearchIcon } from "lucide-react";
+import { SwordIcon, HeartIcon, SearchIcon, PlusIcon, ChevronLeft } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -101,9 +101,9 @@ const GMCardList = () => {
     <>
       <div className="mt-2 mx-4 flex flex-col">
         <nav className="flex justify-between">
-          <Button onClick={() => navigate("/")}>Vissza a menübe</Button>
+          <Button onClick={() => navigate("/")}><ChevronLeft/>Vissza a menübe</Button>
           <h1 className="text-2xl font-semibold text-center mb-2">Kártyák</h1>
-          <Button variant={"outline"} onClick={() => navigate("/card")}>Kártya létrehozása</Button>
+          <Button variant={"outline"} onClick={() => navigate("/card")}><PlusIcon/>Kártya létrehozása</Button>
 
         </nav>
         <Separator />
