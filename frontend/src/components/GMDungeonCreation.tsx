@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { useNavigate } from "react-router-dom"
 import { useLocation } from "react-router-dom"
+import { HeartIcon, SwordIcon } from "lucide-react"
 
 
 export default function CardCreator() {
@@ -32,6 +33,7 @@ export default function CardCreator() {
 
   return (
     <>
+    <Button onClick={() => navigate("/gameenvironment")}>Vissza</Button>
     <div className="flex flex-col md:flex-row gap-6 p-6">
       <div className="flex-1 space-y-4">
         <h2 className="text-xl font-semibold">Kazamata létrehozása</h2>
@@ -86,15 +88,37 @@ export default function CardCreator() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {selectedCards.map((card: any) => (
-                            <div key = {card.id} className="p-3 border rounded-md shadow-sm flex items-center gap-3">
-                                <div className="h-4 w-4 rounded-full" style={{ backgroundColor: card.color }}></div>
-                                <span className="font-medium">{card.name}</span>
-                                <CardContent className="text-sm text-foreground">
-                                    Sebzés: {card.damage}
-                                    Élet: {card.health}
-                                    Típus: {getAffinityName(card.affinity)}
-                                </CardContent>
-                            </div>
+                            <Card key={card.id} className="border rounded-lg p-4 shadow-sm transition hover:shadow-md bg-card text-card-foreground">
+                                <CardTitle className="font-bold text-xl mb-2">{card.name}</CardTitle>
+                                <div className="flex flex-col gap-1 text-sm">
+                                    <div className="flex items-center gap-2">
+                                        <SwordIcon strokeWidth={1.5} size={16} /> 
+                                        <span>Sebzés: {card.damage}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <HeartIcon strokeWidth={1.5} size={16} /> 
+                                        <span>Élet: {card.health}</span>
+                                    </div>
+                                </div>
+                                <div
+                                    className={`mt-3 w-full h-[28px] rounded-md flex items-center justify-center text-white font-semibold transition-all duration-200
+                                    ${Number(card.affinity) === 1 ? "bg-red-500" : ""}
+                                    ${Number(card.affinity) === 2 ? "bg-green-600" : ""}
+                                    ${Number(card.affinity) === 3 ? "bg-blue-600" : ""}
+                                    ${Number(card.affinity) === 4 ? "bg-yellow-400 text-black" : ""}
+                                `}
+                                >
+                                    {Number(card.affinity) === 1
+                                    ? "Tűz típus"
+                                    : Number(card.affinity) === 2
+                                    ? "Föld típus"
+                                    : Number(card.affinity) === 3
+                                    ? "Víz típus"
+                                    : Number(card.affinity) === 4
+                                    ? "Levegő típus"
+                                    : "Ismeretlen típus"}
+                                </div>
+                            </Card>
                         ))}
                     </div>
                 )}

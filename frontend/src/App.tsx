@@ -10,6 +10,7 @@ import GMCardCreation  from "./components/GMCardCreation"
 import GMDungeonCreation from "./components/GMDungeonCreation"
 import DungeonCardSelector from "./components/DungeonCardSelector"
 import GMCardList  from "./components/GMCardList"
+import GameEnvironment from './components/GameEnvironment'
 
 function Logout() {
   localStorage.clear()
@@ -40,6 +41,7 @@ const App = () => {
           <Route path="/dungeon" element={ <GMDungeonCreation />}/>
           <Route path="/cardselector" element={ <DungeonCardSelector />}/>
           <Route path="/cardlist" element={ <GMCardList />}/>
+          <Route path="/gameenvironment" element={ <GameEnvironment />}/>
           <Route path="*" element={ <NotFound />}/>
         </Routes>
       </BrowserRouter>
