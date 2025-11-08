@@ -32,11 +32,6 @@ const GMCardList = () => {
   const [affinityFilter, setAffinityFilter] = useState<string>("all");
 
   useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => document.body.classList.remove("no-scroll");
-  }, []);
-
-  useEffect(() => {
     api
       .get("/game/cards/")
       .then((res) => {
@@ -176,15 +171,15 @@ const GMCardList = () => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-4 gap-x-4 gap-y-4 p-4">
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-4 p-4">
         {filteredData.length > 0 ? (
           filteredData.map((card) => (
             <Card key={card.id} className="CreatedCard p-2 w-full max-h-fit">
-              <div
+              {/* <div
                 id="color"
                 className="w-full h-[30px] rounded-md"
                 style={{ backgroundColor: card.color }}
-              ></div>
+              ></div> */}
 
               <CardTitle className="font-bold text-xl">{card.name}</CardTitle>
               <CardDescription className="text-md text-black flex gap-2 items-center">
