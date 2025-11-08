@@ -168,11 +168,19 @@ export default function Register(){
             />
 
             <Button className="w-full" type="submit">Regisztráció</Button>
-          </form>
+
+            {loading && (
+              <div className="flex items-center justify-center">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-indigo-500"></div>
+              </div>
+            )}
+
             <FormItem className="flex w-full justify-center items-center gap-1">
                 <FormLabel className="text-sm text-muted-foreground">Már van fiókod?</FormLabel>
                 <Button onClick={() => navigate("/login")} variant="link" className="p-0 h-auto">Jelentkezz be!</Button>
             </FormItem>
+          </form>
+            
         </Form>
       </Card>
     </div>
