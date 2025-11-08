@@ -1,105 +1,167 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { useNavigate } from "react-router-dom"
+import api from '@/api'
+import { useEffect, useState } from 'react'
+import { Button } from './ui/button'
+import { useNavigate } from 'react-router-dom'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Separator } from '@/components/ui/separator'
+import { useLocation } from "react-router-dom"
 
-export function DungeonCardSelector() {
+type GameCard = {
+  id: number
+  name: string
+  damage: number
+  health: number
+  affinity: string
+  color: string
+}
+
+const DungeonCardSelector = () => {
   const navigate = useNavigate()
+  const [cards, setCards] = useState<GameCard[]>([])
+  const location = useLocation()
+  const { type, title, selectedCards: initialSelectedCards } = location.state || { type: "", title: "", selectedCards: [] }
+  const [selectedCards, setSelectedCards] = useState<GameCard[]>(initialSelectedCards)
+  const [originalCards] = useState<GameCard[]>(initialSelectedCards)
 
-  // Példa adatok – ezeket később jöhetnek pl. API-ból vagy localStorage-ből
-  const allCards = [
-    { id: 1, title: "Queen of the Dead", type: "large" },
-    { id: 2, title: "Skeleton Guard", type: "simple" },
-    { id: 3, title: "Shadow Maze", type: "small" },
-    { id: 4, title: "Goblin Horde", type: "simple" },
-  ]
 
-  const [selectedCards, setSelectedCards] = useState<number[]>([])
+  useEffect(() => {
+    api.get("/game/cards/")
+    .then(res => {
+      const allCards = res.data
+      const alreadySelectedIds = initialSelectedCards.map((c: any) => c.id)
+      const filteredCards = allCards.filter(
+        (card: any) => !alreadySelectedIds.includes(card.id)
+      )
+      setCards(filteredCards)
+      setSelectedCards(initialSelectedCards)
+    })
+    .catch(error => console.error("Hiba a kártyák lekérésekor:", error))
+  }, [])
 
-  const toggleCard = (id: number) => {
-    setSelectedCards((prev) =>
-      prev.includes(id)
-        ? prev.filter((cardId) => cardId !== id)
-        : [...prev, id]
-    )
+  const toggleCard = (card: GameCard) => {
+    const alreadySelected = selectedCards.some(c => c.id === card.id)
+    if (alreadySelected){
+      setSelectedCards(prev => prev.filter(c => c.id !== card.id))
+      setCards(prev => [...prev, card])
+    } else{
+      if (selectedCards.length < cardLimit){
+        setSelectedCards(prev => [...prev, card])
+        setCards(prev => prev.filter(c => c.id !== card.id))
+      } else {
+        alert(`Csak ${cardLimit} kártyát választhatsz ebbe a kazamatába!`)
+      }
+      
+    }
+  }
+
+  const getCardLimit = (type: string) => {
+    switch (type) {
+      case "simple":
+        return 1
+      case "small":
+        return 3
+      case "large":
+        return 5
+      default:
+        return 0
+    }
+  }
+  const cardLimit = getCardLimit(type)
+
+  const getAffinityName = (affinity: number | string) => {
+    switch  (Number(affinity)){
+      case 1: 
+        return "Tűz"
+      case 2: 
+        return "Föld"
+      case 3:
+        return "Víz"
+      case 4:
+        return "Levegő"
+      default:
+        return "Ismeretlen"
+    }
+  }
+
+  const handleSave = () => {
+    if (selectedCards.length !== cardLimit) {
+      alert(`Pontosan ${cardLimit} kártyát kell választanod!`)
+      return
+    }
+
+    navigate("/dungeon", { 
+      state: { 
+        selectedCards,
+        type: type, 
+        title
+      } 
+    })
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Kártyák kiválasztása</h1>
-        <Button onClick={() => navigate("/dungeon")}>Vissza</Button>
+        <Button onClick={() => navigate("/dungeon", {state: {title, type, selectedCards: originalCards}})}>Vissza</Button>
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="flex-1">
+        <div className='flex-1'>
           <h2 className="text-lg font-semibold mb-2">Kiválasztott kártyák</h2>
           <Separator className="mb-4" />
           {selectedCards.length === 0 ? (
             <p className="text-muted-foreground">Nincs kiválasztott kártya.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {selectedCards.map((id) => {
-                const card = allCards.find((c) => c.id === id)
-                return (
-                  <Card
-                    key={id}
-                    className="cursor-pointer border-primary hover:bg-primary/10 transition"
-                    onClick={() => toggleCard(id)}
-                  >
-                    <CardHeader>
-                      <CardTitle>{card?.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Típus: {card?.type}
-                    </CardContent>
-                  </Card>
-                )
-              })}
+              {selectedCards.map(card => (
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border border-blue-500 bg-blue-100 transition hover:bg-blue-200">
+                  <div className="h-2 w-full rounded-t-md" style={{ backgroundColor: card.color }}></div>
+                  <CardHeader>
+                    <CardTitle>{card.name}</CardTitle>
+                  </CardHeader> 
+                  <CardContent className="text-sm text-muted-foreground">
+                    Sebzés: {card.damage}
+                    Élet: {card.health}
+                    Típus: {getAffinityName(card.affinity)}
+                    
+                  </CardContent>              
+                </Card>
+              ))}
             </div>
           )}
         </div>
-
-        {/* Jobb oldal – összes kártya */}
-        <div className="flex-1">
-          <h2 className="text-lg font-semibold mb-2">Összes kártya</h2>
+        <div className='flex-1'>
+          <h2 className="text-lg font-semibold mb-2">Választható kártyák</h2>
           <Separator className="mb-4" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {allCards.map((card) => (
-              <Card
-                key={card.id}
-                className={`cursor-pointer transition border ${
-                  selectedCards.includes(card.id)
-                    ? "border-primary bg-primary/10"
-                    : "hover:border-primary/50"
-                }`}
-                onClick={() => toggleCard(card.id)}
-              >
-                <CardHeader>
-                  <CardTitle>{card.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Típus: {card.type}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {cards.length === 0 ? (
+             <p className="text-muted-foreground">Nincsenek kártyák az adatbázisban.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {cards.map(card => (
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border transition hover:border-gray-400">
+                  <div  className="h-2 w-full rounded-t-md" style={{ backgroundColor: card.color }}></div>
+                  <CardHeader>
+                    <CardTitle>{card.name}</CardTitle>
+                  </CardHeader> 
+                  <CardContent className="text-sm text-foreground">
+                    Sebzés: {card.damage}
+                    Élet: {card.health}
+                    Típus: {getAffinityName(card.affinity)}
+                  </CardContent>              
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Lábgombok */}
-      <div className="mt-8 flex justify-center gap-4">
-        <Button variant="outline" onClick={() => setSelectedCards([])}>
-          Kiválasztás törlése
-        </Button>
-        <Button
-          disabled={selectedCards.length === 0}
-          onClick={() => alert(`Mentett kártyák: ${selectedCards.join(", ")}`)}
-        >
-          Kártyák mentése
-        </Button>
+      <div className="mt-8 flex justify-center">
+          <Button onClick={handleSave}>
+            Mentés
+          </Button>
       </div>
     </div>
   )
 }
+
+export default DungeonCardSelector
+

@@ -5,11 +5,30 @@ import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
+
 
 export default function CardCreator() {
-  const [title, setTitle] = useState("Queen of the Dead")
-  const [type, setType] = useState("")
+  const location = useLocation()
+  const [title, setTitle] = useState(location.state?.title || "Queen of the Dead")
+  const [type, setType] = useState(location.state?.type || "")
   const navigate = useNavigate()
+  const selectedCards = location.state?.selectedCards || []
+
+  const getAffinityName = (affinity: number | string) => {
+    switch  (Number(affinity)){
+      case 1: 
+        return "Tűz"
+      case 2: 
+        return "Föld"
+      case 3:
+        return "Víz"
+      case 4:
+        return "Levegő"
+      default:
+        return "Ismeretlen"
+    }
+  }
 
   return (
     <>
@@ -35,7 +54,7 @@ export default function CardCreator() {
           </div>
         </div> 
         <div className="space-y-2">
-            <Button onClick={() => navigate("/cardselector")}>
+            <Button onClick={() => navigate("/cardselector", { state: { type, title, selectedCards }})}>
                 Kártyák választása
             </Button>  
         </div>
@@ -59,6 +78,26 @@ export default function CardCreator() {
               `}
             >
               {type === "" ? "Nincs típus" : type === "simple" ? "Egyszerű találkozás" : type === "small" ? "Kis kazamata" : type === "large" ? "Nagy kazamata" : "Ismeretlen típus"}
+            </div>
+            <div className="mt-6">
+                <h3 className="text-lg font-semibold mb-2">Kiválasztott kártyák</h3>
+                {selectedCards.length === 0 ? (
+                    <p className="text-muted-foreground">Még nem választottál kártyákat.</p>
+                ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {selectedCards.map((card: any) => (
+                            <div key = {card.id} className="p-3 border rounded-md shadow-sm flex items-center gap-3">
+                                <div className="h-4 w-4 rounded-full" style={{ backgroundColor: card.color }}></div>
+                                <span className="font-medium">{card.name}</span>
+                                <CardContent className="text-sm text-foreground">
+                                    Sebzés: {card.damage}
+                                    Élet: {card.health}
+                                    Típus: {getAffinityName(card.affinity)}
+                                </CardContent>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
           </CardContent>
         </Card>

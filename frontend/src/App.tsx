@@ -8,7 +8,7 @@ import { NotFound } from './components/NotFound'
 import { Home } from './components/Home'
 import GMCardCreation  from "./components/GMCardCreation"
 import GMDungeonCreation from "./components/GMDungeonCreation"
-import {DungeonCardSelector} from "./components/DungeonCardSelector"
+import DungeonCardSelector from "./components/DungeonCardSelector"
 
 function Logout() {
   localStorage.clear()
