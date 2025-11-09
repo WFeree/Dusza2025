@@ -58,6 +58,7 @@ export default function DungeonCreator() {
     const bossCard = selectedCards.length > 0 ? selectedCards[0].id : null
 
     const res = await api.post("/game/dungeons/", {
+      name: title,
       game: gameId,
       cards: cardIds,
       dungeonType,
