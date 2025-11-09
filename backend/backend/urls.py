@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include, re_path
 from damareen.views.registerView import RegisterUserView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from damareen.views.frontend import home_view
@@ -11,5 +11,5 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("api-auth/", include("rest_framework.urls")),
     path("game/", include("damareen.urls")),
-    path("", home_view, name="home")
+    re_path(r'^(?:.*)/?$', home_view, name='home'),
 ]

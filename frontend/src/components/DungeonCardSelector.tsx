@@ -90,6 +90,7 @@ const DungeonCardSelector = () => {
     }
   }
   const cardLimit = getCardLimit(type)
+  cardLimit
 
   const handleSave = () => {
   const normalCount = selectedCards.filter((c) => !c.name.toLowerCase().includes("(vezér)")).length
@@ -173,7 +174,7 @@ const DungeonCardSelector = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {selectedCards.map(card => (
-                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border border-blue-500 bg-blue-100 transition hover:bg-blue-200 transition p-3">
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border border-blue-500 bg-blue-100 hover:bg-blue-200 transition p-3">
                   <CardTitle className="font-bold text-xl">{card.name}</CardTitle>
                   <div className="text-md text-black flex gap-2 items-center">
                     <SwordIcon strokeWidth={1.5} size={18} /> Sebzés: {card.damage}
@@ -210,7 +211,7 @@ const DungeonCardSelector = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {cards.map(card => (
-                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border transition hover:border-gray-400 transition p-3">
+                <Card key={card.id} onClick={() => toggleCard(card)} className="cursor-pointer border hover:border-gray-400 transition p-3">
                   <CardTitle className="font-bold text-xl">{card.name}</CardTitle>  
                   <div className="text-md text-black flex gap-2 items-center">
                     <SwordIcon strokeWidth={1.5} size={18} /> Sebzés: {card.damage}

@@ -58,10 +58,6 @@ export default function DungeonCreator() {
         c.name.toLowerCase().includes("(vezér)")
       )
 
-      const bossId = bossCard?.originalCardId || null
-
-      const extraValue = bossCard?.extraType === "health" ? true : false
-
     const res = await api.post("/game/dungeons/", {
       name: title,
       game: gameId,
@@ -220,7 +216,7 @@ export default function DungeonCreator() {
                           </div>
                         </div>
                         <div
-                          className={`mt-3 w-full h-[28px] rounded-md flex items-center justify-center text-white font-semibold transition-all duration-200
+                          className={`mt-3 w-full h-7 rounded-md flex items-center justify-center text-white font-semibold transition-all duration-200
                           ${Number(card.affinity) === 1 ? "bg-red-500" : ""}
                           ${Number(card.affinity) === 2 ? "bg-green-600" : ""}
                           ${Number(card.affinity) === 3 ? "bg-blue-600" : ""}
@@ -261,7 +257,7 @@ export default function DungeonCreator() {
           onClick={() => handleSubmit("new")}
           disabled={loading}
         >
-          Mentés és új kártya létrehozása
+          Mentés és új kazamata létrehozása
         </Button>
       </div>
     </>
