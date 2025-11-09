@@ -1,5 +1,5 @@
 import { SearchIcon } from "lucide-react"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import {
@@ -29,6 +29,8 @@ const CardFilter = ({ data, onFilter }: CardFilterProps) => {
   const [sortType, setSortType] = useState<string>("")
   const [searchTerm, setSearchTerm] = useState<string>("")
   const [affinityFilter, setAffinityFilter] = useState<string>("all")
+
+  filteredData
 
   useEffect(() => {
     let result = [...data]

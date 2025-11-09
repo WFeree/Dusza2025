@@ -21,6 +21,9 @@ const PGameSelect = () => {
   const [GData, setGData] = useState<GameType[]>([]);
   const [DData, setDData] = useState<DungeonType[]>([]);
 
+  GData
+  DData
+
   const [GfilteredData, setGFilteredData] = useState<GameType[]>([]);
   const [DfilteredData, setDFilteredData] = useState<DungeonType[]>([]);
 

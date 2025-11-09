@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardTitle, CardDescription } from "./ui/card";
-import { SwordIcon, HeartIcon, SearchIcon, PlusIcon, ChevronLeft, TrashIcon, ChevronRight } from "lucide-react";
-import { Separator } from "./ui/separator";
+import { SwordIcon, HeartIcon, TrashIcon, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label"
@@ -54,6 +53,11 @@ const GMCardList = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [affinityFilter, setAffinityFilter] = useState<string>("all");
   const [filteredCards, setFilteredCards] = useState<any[]>([]);
+
+  setSortType
+  filteredData
+  setSearchTerm
+  setAffinityFilter
 
   useEffect(() => {
     api
@@ -112,9 +116,6 @@ const GMCardList = () => {
     return sorted;
   };
 
-  const handleSortClick = (type: string) => {
-    setSortType((prev) => (prev === type ? "" : type));
-  };
 
   const deleteCard = (cardId: number) => {
     api

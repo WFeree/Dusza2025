@@ -90,6 +90,7 @@ const DungeonCardSelector = () => {
     }
   }
   const cardLimit = getCardLimit(type)
+  cardLimit
 
   const handleSave = () => {
   const normalCount = selectedCards.filter((c) => !c.name.toLowerCase().includes("(vezér)")).length

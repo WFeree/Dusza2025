@@ -58,9 +58,6 @@ export default function DungeonCreator() {
         c.name.toLowerCase().includes("(vezér)")
       )
 
-      const bossId = bossCard?.originalCardId || null
-
-      const extraValue = bossCard?.extraType === "health" ? true : false
 
     const res = await api.post("/game/dungeons/", {
       name: title,
