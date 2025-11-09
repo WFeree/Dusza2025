@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Card, CardDescription, CardTitle } from './ui/card'
 import { HeartIcon, SwordIcon } from 'lucide-react'
-import Navbar from './Navbar'
+import Navbar from './PNavbar'
 import { Button } from './ui/button'
 
 type GameCard = {
@@ -102,9 +102,6 @@ const BattlePage = () => {
         else if (playerWins < dungeonWins) setResult("💀 A kazamata győzött!")
         else setResult("🤝 Döntetlen!")
 
-        setTimeout(() => {
-            navigate("/player/", { state: { gameId, reopen: true } })
-        }, 5000)
     }
 
     const getAffinityName = (aff: number) => {
@@ -186,6 +183,12 @@ const BattlePage = () => {
               ))}
             </ul>
             <h3 className="font-bold mt-4 text-center text-lg">{result}</h3>
+
+            <div className="flex justify-center mt-6">
+                <Button variant="outline" onClick={() => navigate("/player/", { state: { gameId, reopen: true } })}>
+                    Vissza a kazamatákhoz
+                </Button>
+            </div>
           </div>
         )}
       </div>

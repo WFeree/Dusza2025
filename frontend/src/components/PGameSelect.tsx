@@ -3,7 +3,8 @@ import api from "@/api";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import PNavbar from "./PNavbar";
-import { useLocation, SwordIcon } from "lucide-react";
+import { SwordIcon } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type GameType = { id: number; creator: number };
 type DungeonType = {
@@ -91,9 +92,9 @@ const PGameSelect = () => {
                         <CardTitle>
                           {dungeonTypeNames[type] ?? "Ismeretlen típus"}
                         </CardTitle>
-                        <Button><SwordIcon/ onClick={() => navigate("/player/deckbuilder", {state: { gameId, dungeonId: dungeon.id },})}>
-                      Harc
-                    </Button>
+                        <Button onClick={() => navigate("/player/deckbuilder", {state: { gameId, dungeonId: dungeon.id },})}><SwordIcon/>
+                          Harc
+                        </Button>
                       </CardContent>
                     </Card>
                   );
