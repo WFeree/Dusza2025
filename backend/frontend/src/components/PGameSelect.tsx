@@ -27,7 +27,7 @@ const PGameSelect = () => {
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
-    api.get("/game/games").then((res) => setGFilteredData(res.data));
+    api.get("/game/games/").then((res) => setGFilteredData(res.data));
     api.get("/game/dungeons/").then((res) => setDFilteredData(res.data));
   }, []);
 
