@@ -35,30 +35,35 @@ const GameEnvironment = () => {
   }
 
   const handleSave = async () => {
+    if (selectedCards.length === 0) {
+        alert("Legalább egy kártyát ki kell választanod a gyűjtemény mentéséhez!")
+        return
+    }
+
     setLoading(true)
     try {
         const gameRes = await api.post("/game/games/", {})
         const gameId = gameRes.data.id
         console.log("Game létrehozva, ID:", gameId)
 
-        for (const card of selectedCards){
-            await api.post("/game/playerCards/", {
-                "game": gameId,
-                "card": card.id,
-                "isBoss": false,
-                "extra": false
-            })
+        for (const card of selectedCards) {
+        await api.post("/game/playerCards/", {
+            game: gameId,
+            card: card.id,
+            isBoss: false,
+            extra: false,
+        })
         }
-        alert(`Gyűjtemény sikeresen mentve az adatbázisba! (${selectedCards.length} kártya)`)
 
+        alert(`Gyűjtemény sikeresen mentve az adatbázisba! (${selectedCards.length} kártya)`)
         navigate("/dungeon", { state: { gameId } })
-    }catch (error) {
+    } catch (error) {
         console.error("Hiba a gyűjtemény mentésekor:", error)
         alert("Nem sikerült menteni a gyűjteményt.")
     } finally {
         setLoading(false)
     }
-  }
+ }
 
   return (
     <>

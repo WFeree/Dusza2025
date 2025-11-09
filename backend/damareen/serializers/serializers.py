@@ -42,14 +42,14 @@ class CardSerializer(serializers.ModelSerializer):
 class DungeonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dungeon
-        fields = ['id', 'game', 'cards', 'dungeonType', 'boss', 'extra', 'completed']
+        fields = ['id', 'game', 'cards', 'dungeonType', 'boss', 'extra', 'completed', 'name']
         extra_kwargs = {'id': {'read_only': True}}
     
     def validate(self, value):
         if value['game'].creator != self.context['request'].user:
             raise serializers.ValidationError("Csak a játék létrehozója hozhat létre kazamatákat ehhez a játékhoz.")
 
-        if 'boss' not in value.keys():
+        if value['dungeonType'] != 1 and 'boss' not in value.keys():
             raise serializers.ValidationError("A vezér mező nem hiányozhat.")
 
         match value['dungeonType']:
