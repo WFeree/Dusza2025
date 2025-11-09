@@ -163,44 +163,7 @@ const GMCardList = () => {
                   ? "Levegő típus"
                   : "Föld típus"}
               </div>
-              <div className="flex items-center justify-between">
-
-                <Dialog>
-                  <form onSubmit={()=>{}}>
-                    <DialogTrigger asChild>
-                      <Button variant={"secondary"} className="wrap-break-word">Vezér létrehozása</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Vezér létrehozása</DialogTitle>
-                      </DialogHeader>
-                      <div className="grid gap-4">
-                        <div className="grid gap-3">
-                          <Label htmlFor="name">Név</Label>
-                          <Input id="name" defaultValue={card.name} />
-                        </div>
-                        <div className="grid gap-3">
-                          <Label htmlFor="username-1">Melyik képessége fejlődjön?</Label>
-                          <Select>
-                            <SelectTrigger className="w-full">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="hp">Életerő <ChevronRight/> {card.health * 2}</SelectItem>
-                              <SelectItem value="damage">Sebzés <ChevronRight/> {card.damage * 2}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <DialogFooter>
-                        <DialogClose asChild>
-                          <Button variant="outline">Mégse</Button>
-                        </DialogClose>
-                        <Button type="submit">Vezér létrehozása</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </form>
-                </Dialog>
+              <div className="flex items-center justify-end">
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
