@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-v4(q3c3d98s@)gz!e8g)thh76yr@(imrjzdi1xin8v6v@zwq&j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['20.79.42.35', 'localhost']
 
 
 # Application definition
@@ -59,7 +59,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/ "../frontend/dist"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,7 +119,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'assets/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -127,7 +127,12 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
-     'http://localhost:5173'
+     'http://localhost:5173',
+     'http://20.79.42.35:80'
+]
+
+STATICFILES_DIRS = [
+    BASE_DIR / "../frontend/dist/assets/",
 ]
 
 REST_FRAMEWORK = {

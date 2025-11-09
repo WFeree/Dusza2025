@@ -10,6 +10,7 @@ DUNGEON_TYPES = {
 }
 
 class Dungeon(models.Model):
+    name = models.CharField(max_length=100, blank=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=True)
     cards = models.ManyToManyField(Card, related_name='dungeon_cards', blank=True)
     dungeonType = models.IntegerField(choices=DUNGEON_TYPES, blank=True)

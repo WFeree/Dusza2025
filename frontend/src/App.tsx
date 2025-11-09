@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -11,6 +10,7 @@ import GMDungeonCreation from "./components/GMDungeonCreation"
 import DungeonCardSelector from "./components/DungeonCardSelector"
 import GMCardList  from "./components/GMCardList"
 import GameEnvironment from './components/GameEnvironment'
+import PGameSelect from './components/PGameSelect'
 
 function Logout() {
   localStorage.clear()
@@ -42,6 +42,7 @@ const App = () => {
           <Route path="/cardselector" element={ <DungeonCardSelector />}/>
           <Route path="/cardlist" element={ <GMCardList />}/>
           <Route path="/gameenvironment" element={ <GameEnvironment />}/>
+          <Route path="/player" element={ <PGameSelect />}/>
           <Route path="*" element={ <NotFound />}/>
         </Routes>
       </BrowserRouter>

@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate, useLocation } from "react-router-dom"
 import { HeartIcon, SwordIcon } from "lucide-react"
@@ -17,6 +18,8 @@ export default function DungeonCreator() {
   const [selectedCards, setSelectedCards] = useState(location.state?.selectedCards || [])
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  errorMessage
 
   useEffect(() => {
     const idFromState = location.state?.gameId
@@ -60,14 +63,15 @@ export default function DungeonCreator() {
 
       const extraValue = bossCard?.extraType === "health" ? true : false
 
-      const res = await api.post("/game/dungeons/", {
-        game: gameId,
-        cards: cardIds,
-        dungeonType,
-        boss: bossId,
-        extra: extraValue,
-        completed: false,
-      })
+    const res = await api.post("/game/dungeons/", {
+      name: title,
+      game: gameId,
+      cards: cardIds,
+      dungeonType,
+      boss: bossCard,
+      extra: false,
+      completed: false,
+    })
 
       if (res.status === 201 || res.status === 200) {
         console.log("Kazamata mentve:", res.data)
