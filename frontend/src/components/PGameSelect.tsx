@@ -2,103 +2,91 @@ import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { useNavigate } from "react-router-dom";
+import PNavbar from "./PNavbar";
+import { SwordIcon } from "lucide-react";
 
-type GameType = {
-  id: number;
-  creator: number;
-};
-
+type GameType = { id: number; creator: number };
 type DungeonType = {
   id: number;
-  creator: number;
+  boss: number;
+  dungeonType: number | string;
+  completed: boolean;
+  extra: boolean;
   game: number;
+  name: string;
 };
 
 const PGameSelect = () => {
-  const navigate = useNavigate();
-
-  const [GData, setGData] = useState<GameType[]>([]);
-  const [DData, setDData] = useState<DungeonType[]>([]);
-
   const [GfilteredData, setGFilteredData] = useState<GameType[]>([]);
   const [DfilteredData, setDFilteredData] = useState<DungeonType[]>([]);
-
   const [gameId, setGameId] = useState<number>(0);
   const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
-    // ✅ Fetch games
-    api
-      .get("/game/games")
-      .then((res) => {
-        setGData(res.data);
-        setGFilteredData(res.data);
-        console.log("Games:", res.data);
-      })
-      .catch((error) => console.error(error));
-
-    api
-      .get("/game/dungeons/")
-      .then((res) => {
-        setDData(res.data);
-        setDFilteredData(res.data);
-        console.log("Dungeons:", res.data);
-      })
-      .catch((error) => console.error(error));
+    api.get("/game/games").then((res) => setGFilteredData(res.data));
+    api.get("/game/dungeons/").then((res) => setDFilteredData(res.data));
   }, []);
 
   const relatedDungeons = DfilteredData.filter((d) => d.game === gameId);
+  const dungeonTypeNames: Record<number, string> = {
+    1: "Egyszerű találkozás",
+    2: "Kis kazamata",
+    3: "Nagy kazamata",
+  };
 
   return (
     <>
-      <h1 className="text-xl font-bold mb-4">Játék kiválasztása</h1>
-      <div className="flex gap-4 flex-wrap">
-        {!gameStarted && (
+      <PNavbar gameStarted={gameStarted} setGameStarted={setGameStarted} />
+
+      <div className="p-4">
+        {!gameStarted ? (
           <>
-            {GfilteredData.map((game, index) => (
-              <Card key={`game-${game.id}-${index}`}>
-                <CardContent>
-                  <CardTitle>Játék {game.id}</CardTitle>
-                  <Button
-                    onClick={() => {
-                      setGameId(game.id);
-                      setGameStarted(true);
-                    }}
-                  >
-                    Kiválasztás
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </>
-        )}
-
-        {gameStarted && (
-          <>
-            <nav className="flex gap-2 mb-4 w-full">
-              <Button onClick={() => navigate("/")}>Vissza a menübe</Button>
-              <Button onClick={() => setGameStarted(false)} variant="outline">
-                Játék választása
-              </Button>
-            </nav>
-
-            <h2 className="text-lg font-semibold w-full">
-              Játék folyamatban: {gameId}
-            </h2>
-
-            {relatedDungeons.length > 0 ? (
-              relatedDungeons.map((dungeon, index) => (
-                <Card key={`dungeon-${dungeon.id}-${index}`}>
-                  <CardContent>
-                    <CardTitle>Dungeon {dungeon.id}</CardTitle>
-                    <Button>Harc</Button>
+            <h1 className="text-xl font-bold mb-4 text-center">
+              Játék kiválasztása
+            </h1>
+            <div className="flex gap-4 flex-wrap">
+              {GfilteredData.map((game) => (
+                <Card key={game.id} className="m-0">
+                  <CardContent className="flex flex-col gap-2">
+                    <CardTitle>Játék {game.id}</CardTitle>
+                    <Button
+                      onClick={() => {
+                        setGameId(game.id);
+                        setGameStarted(true);
+                      }}
+                    >
+                      Kiválasztás
+                    </Button>
                   </CardContent>
                 </Card>
-              ))
-            ) : (
-              <p className="text-gray-500">Nincs dungeon ehhez a játékhoz.</p>
-            )}
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="text-lg font-semibold w-full mb-2 text-center">
+              Játék {gameId}
+            </h2>
+            <div className="flex">
+              {relatedDungeons.length > 0 ? (
+                relatedDungeons.map((dungeon) => {
+                  const type = Number(dungeon.dungeonType);
+                  return (
+                    <Card key={dungeon.id} >
+                      <CardContent className="flex flex-col gap-2">
+                        <CardTitle>{dungeon.name}</CardTitle>
+                        <CardTitle>
+                          {dungeonTypeNames[type] ?? "Ismeretlen típus"}
+                        </CardTitle>
+                        <Button><SwordIcon/>Harc</Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })
+              ) : (
+                <p className="text-gray-500">Nincs dungeon ehhez a játékhoz.</p>
+              )}
+            </div>
           </>
         )}
       </div>

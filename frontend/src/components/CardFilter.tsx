@@ -89,7 +89,7 @@ const CardFilter = ({ data, onFilter }: CardFilterProps) => {
           size={18}
         />
         <Input
-          placeholder="Keresés név alapján..."
+          placeholder="Kártyák keresése név alapján"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-8"

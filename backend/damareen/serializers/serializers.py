@@ -27,8 +27,8 @@ class CardSerializer(serializers.ModelSerializer):
         if value is None:
             raise serializers.ValidationError("A életerő mező nem lehet üres.")
             
-        if value < 2 or value > 100:
-            raise serializers.ValidationError("A életerő mező értéke 2 és 100 között kell legyen.")
+        if value < 1 or value > 100:
+            raise serializers.ValidationError("A életerő mező értéke 1 és 100 között kell legyen.")
         return value    
 
     def validate_damage(self, value):
