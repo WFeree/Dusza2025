@@ -63,7 +63,7 @@ export default function DungeonCreator() {
       game: gameId,
       cards: cardIds,
       dungeonType,
-      boss: bossCard,
+      boss: bossCard?.id || null,
       extra: false,
       completed: false,
     })

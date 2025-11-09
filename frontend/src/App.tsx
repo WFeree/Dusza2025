@@ -11,6 +11,8 @@ import DungeonCardSelector from "./components/DungeonCardSelector"
 import GMCardList  from "./components/GMCardList"
 import GameEnvironment from './components/GameEnvironment'
 import PGameSelect from './components/PGameSelect'
+import PlayerDeckBuilder from "./components/PlayerDeckBuilder"
+import BattlePage from "./components/BattlePage"
 
 function Logout() {
   localStorage.clear()
@@ -43,6 +45,8 @@ const App = () => {
           <Route path="/cardlist" element={ <GMCardList />}/>
           <Route path="/gameenvironment" element={ <GameEnvironment />}/>
           <Route path="/player" element={ <PGameSelect />}/>
+          <Route path="/player/deckbuilder" element={<PlayerDeckBuilder />} />
+          <Route path="/battle" element={<BattlePage />} />
           <Route path="*" element={ <NotFound />}/>
         </Routes>
       </BrowserRouter>

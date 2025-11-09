@@ -3,7 +3,7 @@ import api from "@/api";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import PNavbar from "./PNavbar";
-import { SwordIcon } from "lucide-react";
+import { useLocation, SwordIcon } from "lucide-react";
 
 type GameType = { id: number; creator: number };
 type DungeonType = {
@@ -17,6 +17,12 @@ type DungeonType = {
 };
 
 const PGameSelect = () => {
+  const navigate = useNavigate();
+  const location = useLocation()
+
+  const [GData, setGData] = useState<GameType[]>([]);
+  const [DData, setDData] = useState<DungeonType[]>([]);
+
   const [GfilteredData, setGFilteredData] = useState<GameType[]>([]);
   const [DfilteredData, setDFilteredData] = useState<DungeonType[]>([]);
   const [gameId, setGameId] = useState<number>(0);
@@ -26,6 +32,13 @@ const PGameSelect = () => {
     api.get("/game/games").then((res) => setGFilteredData(res.data));
     api.get("/game/dungeons/").then((res) => setDFilteredData(res.data));
   }, []);
+
+  useEffect(() => {
+    if (location.state?.reopen && location.state?.gameId) {
+      setGameId(location.state.gameId)
+      setGameStarted(true)
+    }
+  }, [location.state])
 
   const relatedDungeons = DfilteredData.filter((d) => d.game === gameId);
   const dungeonTypeNames: Record<number, string> = {
@@ -78,7 +91,9 @@ const PGameSelect = () => {
                         <CardTitle>
                           {dungeonTypeNames[type] ?? "Ismeretlen típus"}
                         </CardTitle>
-                        <Button><SwordIcon/>Harc</Button>
+                        <Button><SwordIcon/ onClick={() => navigate("/player/deckbuilder", {state: { gameId, dungeonId: dungeon.id },})}>
+                      Harc
+                    </Button>
                       </CardContent>
                     </Card>
                   );
