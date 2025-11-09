@@ -24,7 +24,6 @@ const CardTypes: CardTypesType = {
 
 export default function CardCreator() {
   const navigate = useNavigate()
-  const [color, setColor] = useState("#0084d1")
   const [title, setTitle] = useState("Queen of the Dead")
   const [damage, setDamage] = useState(2)
   const [health, setHealth] = useState(2)
@@ -47,7 +46,6 @@ export default function CardCreator() {
         damage: damage,
         health: health,
         affinity: CardTypes[type],
-        color: color,
       })
 
       if (res.status === 201 || res.status === 200) {

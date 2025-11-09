@@ -74,8 +74,11 @@ def ChallangeDungeon(req):
 
         else:
             winners.append("dungeon")
-        
-
-        
-
     return JsonResponse({'result': winners}, status=200)
+
+
+class DeleteCard(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
