@@ -54,8 +54,8 @@ class DungeonSerializer(serializers.ModelSerializer):
 
         match value['dungeonType']:
             case 1:
-                if len(value['cards']) != 2:
-                    raise serializers.ValidationError("A SIMPLE típusú kazamatákat pontosan 2 kártyát kell tartalmaznia.")
+                if len(value['cards']) != 1:
+                    raise serializers.ValidationError("A SIMPLE típusú kazamatákat pontosan 1 kártyát kell tartalmaznia.")
             case 2:
                 if len(value['cards']) != 3 or not value['boss']:
                     raise serializers.ValidationError("A SMALL típusú kazamatákat pontosan 3 kártyát kell tartalmaznia, amelyek közül egy vezér.")

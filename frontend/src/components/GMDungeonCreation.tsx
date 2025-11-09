@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
 import { Label } from "@/components/ui/label"
@@ -7,29 +7,82 @@ import { Separator } from "@/components/ui/separator"
 import { useNavigate } from "react-router-dom"
 import { useLocation } from "react-router-dom"
 import { HeartIcon, SwordIcon } from "lucide-react"
+import api from "@/api"
 
 
-export default function CardCreator() {
+export default function DungeonCreator() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const [gameId, setGameId] = useState<number | null>(null)
   const [title, setTitle] = useState(location.state?.title || "Queen of the Dead")
   const [type, setType] = useState(location.state?.type || "")
-  const navigate = useNavigate()
-  const selectedCards = location.state?.selectedCards || []
+  const [selectedCards, setSelectedCards] = useState(location.state?.selectedCards || [])
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const getAffinityName = (affinity: number | string) => {
-    switch  (Number(affinity)){
-      case 1: 
-        return "Tűz"
-      case 2: 
-        return "Föld"
-      case 3:
-        return "Víz"
-      case 4:
-        return "Levegő"
-      default:
-        return "Ismeretlen"
+  useEffect(() => {
+    const idFromState = location.state?.gameId
+    const idFromStorage = localStorage.getItem("gameId")
+
+    if (idFromState) {
+      setGameId(idFromState)
+      localStorage.setItem("gameId", idFromState)
+    } else if (idFromStorage) {
+      setGameId(Number(idFromStorage))
+    } else {
+      alert("Nincs játék azonosító — visszairányítunk a gyűjteményhez.")
+      navigate("/gameenvironment")
     }
+  }, [location, navigate])
+
+  const handleSubmit = async (redirectTo?: string) => {
+  if (!gameId) {
+    setErrorMessage("Hiányzik a game ID!")
+    return
   }
+
+  setLoading(true)
+  setErrorMessage(null)
+
+  try {
+    const typeMap: any = {
+      simple: 1,
+      small: 2,
+      large: 3,
+    }
+
+    const dungeonType = typeMap[type] || 1
+    const cardIds = selectedCards.map((c: any) => c.id)
+    const bossCard = selectedCards.length > 0 ? selectedCards[0].id : null
+
+    const res = await api.post("/game/dungeons/", {
+      game: gameId,
+      cards: cardIds,
+      dungeonType,
+      boss: bossCard,
+      extra: false,
+      completed: false,
+    })
+
+    if (res.status === 201 || res.status === 200) {
+      console.log("Kazamata mentve:", res.data)
+      if (redirectTo === "home") {
+        navigate("/")
+      } else if (redirectTo === "new") {
+        setTitle("Új kazamata")
+        setType("")
+        setSelectedCards([])
+      }
+    }
+  } catch (error: any) {
+    console.error("Kazamata mentési hiba:", error)
+    setErrorMessage("Nem sikerült menteni a kazamatát.")
+    console.error("Szerver válasz:", error?.response?.data) // <-- EZ KELL
+    alert(JSON.stringify(error?.response?.data)) 
+  } finally {
+    setLoading(false)
+  }
+}
 
   return (
     <>
@@ -130,8 +183,8 @@ export default function CardCreator() {
       </div>
     </div>
     <div className="flex justify-center gap-4">
-      <Button type="submit">Mentés</Button>
-      <Button variant={"outline"} type="submit">Mentés és új kártya létrehozása</Button>
+      <Button type="submit" onClick={() => handleSubmit("home")} disabled={loading}>Mentés</Button>
+      <Button variant={"outline"} type="submit" onClick={() => handleSubmit("new")} disabled={loading}>Mentés és új kártya létrehozása</Button>
     </div>
     </>
   )
