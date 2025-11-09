@@ -9,6 +9,7 @@ import api from "@/api"
 import { AxiosError } from "axios"
 import { useNavigate } from "react-router-dom"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import Navbar from "./Navbar"
 
 interface CardTypesType {
   [key: string]: number
@@ -84,22 +85,7 @@ export default function CardCreator() {
 
   return (
     <>
-      <div className="mt-2 mx-4 flex flex-col">
-        <nav className="flex justify-between">
-          <Button onClick={() => navigate("/")}>
-            <ChevronLeft />
-            Vissza a menübe
-          </Button>
-          <h1 className="text-2xl font-semibold text-center mb-2">
-            Kártya létrehozása
-          </h1>
-          <Button variant={"outline"} onClick={() => navigate("/cardlist")}>
-            <EyeIcon />
-            Kártyák megtekintése
-          </Button>
-        </nav>
-        <Separator />
-      </div>
+      <Navbar />
 
       {/* ⚠️ Error Alert */}
       {errorMessage && (

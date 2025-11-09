@@ -6,6 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useLocation } from "react-router-dom"
 import { SwordIcon, HeartIcon } from "lucide-react"
+import { Label } from '@radix-ui/react-label'
+import { Input } from './ui/input'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 type GameCard = {
   id: number
@@ -23,6 +31,10 @@ const DungeonCardSelector = () => {
   const { type, title, selectedCards: initialSelectedCards } = location.state || { type: "", title: "", selectedCards: [] }
   const [selectedCards, setSelectedCards] = useState<GameCard[]>(initialSelectedCards)
   const [originalCards] = useState<GameCard[]>(initialSelectedCards)
+  const [showDialog, setShowDialog] = useState(false)
+  const [baseCard, setBaseCard] = useState<any | null>(null)
+  const [bossName, setBossName] = useState("")
+  const [boostType, setBoostType] = useState<"damage" | "health" | "">("")
 
 
   useEffect(() => {
@@ -40,20 +52,30 @@ const DungeonCardSelector = () => {
   }, [])
 
   const toggleCard = (card: GameCard) => {
-    const alreadySelected = selectedCards.some(c => c.id === card.id)
-    if (alreadySelected){
-      setSelectedCards(prev => prev.filter(c => c.id !== card.id))
-      setCards(prev => [...prev, card])
-    } else{
-      if (selectedCards.length < cardLimit){
-        setSelectedCards(prev => [...prev, card])
-        setCards(prev => prev.filter(c => c.id !== card.id))
-      } else {
-        alert(`Csak ${cardLimit} kártyát választhatsz ebbe a kazamatába!`)
+    const alreadySelected = selectedCards.some((c) => c.id === card.id)
+
+    const normalCount = selectedCards.filter((c) => !c.name.toLowerCase().includes("(vezér)")).length
+    const bossCount = selectedCards.filter((c) => c.name.toLowerCase().includes("(vezér)")).length
+
+    const normalLimit = type === "simple" ? 1 : type === "small" ? 3 : type === "large" ? 5 : 0
+    const bossLimit = type === "simple" ? 0 : 1
+
+    if (alreadySelected) {
+      setSelectedCards((prev) => prev.filter((c) => c.id !== card.id))
+      setCards((prev) => [...prev, card])
+    } else {
+      if (!card.name.toLowerCase().includes("(vezér)") && normalCount >= normalLimit) {
+        alert(`Ebben a kazamatában legfeljebb ${normalLimit} sima kártyát választhatsz.`)
+        return
       }
-      
+      if (card.name.toLowerCase().includes("(vezér)") && bossCount >= bossLimit) {
+        alert(`Ebben a kazamatában csak ${bossLimit} vezérkártya engedélyezett.`)
+        return
+      }
+      setSelectedCards((prev) => [...prev, card])
+      setCards((prev) => prev.filter((c) => c.id !== card.id))
     }
-  }
+}
 
   const getCardLimit = (type: string) => {
     switch (type) {
@@ -69,34 +91,65 @@ const DungeonCardSelector = () => {
   }
   const cardLimit = getCardLimit(type)
 
-  const getAffinityName = (affinity: number | string) => {
-    switch  (Number(affinity)){
-      case 1: 
-        return "Tűz"
-      case 2: 
-        return "Föld"
-      case 3:
-        return "Víz"
-      case 4:
-        return "Levegő"
-      default:
-        return "Ismeretlen"
-    }
+  const handleSave = () => {
+  const normalCount = selectedCards.filter((c) => !c.name.toLowerCase().includes("(vezér)")).length
+  const bossCount = selectedCards.filter((c) => c.name.toLowerCase().includes("(vezér)")).length
+
+  if (type === "simple" && (normalCount !== 1 || bossCount !== 0)) {
+    alert("Az egyszerű kazamatának pontosan 1 sima kártyát kell tartalmaznia.")
+    return
+  }
+  if (type === "small" && (normalCount !== 3 || bossCount !== 1)) {
+    alert("A kis kazamatának 3 sima és 1 vezérkártyát kell tartalmaznia.")
+    return
+  }
+  if (type === "large" && (normalCount !== 5 || bossCount !== 1)) {
+    alert("A nagy kazamatának 5 sima és 1 vezérkártyát kell tartalmaznia.")
+    return
   }
 
-  const handleSave = () => {
-    if (selectedCards.length !== cardLimit) {
-      alert(`Pontosan ${cardLimit} kártyát kell választanod!`)
+  navigate("/dungeon", {
+    state: {
+      selectedCards,
+      type,
+      title,
+    },
+  })
+}
+
+  const handleCreateBoss = async () => {
+    if (!baseCard || !bossName || !boostType) return
+
+    const bossCount = selectedCards.filter((c) => c.name.toLowerCase().includes("(vezér)")).length
+    const bossLimit = type === "simple" ? 0 : 1
+    if (bossCount >= bossLimit) {
+      alert(`Ehhez a kazamatatípushoz legfeljebb ${bossLimit} vezérkártya hozható létre.`)
       return
     }
 
-    navigate("/dungeon", { 
-      state: { 
-        selectedCards,
-        type: type, 
-        title
-      } 
-    })
+    const newCardData = {
+      name: `${bossName} (Vezér)`,
+      damage: boostType === "damage" ? baseCard.damage * 2 : baseCard.damage,
+      health: boostType === "health" ? baseCard.health * 2 : baseCard.health,
+      affinity: baseCard.affinity,
+    }
+
+    try {
+      const res = await api.post("/game/cards/", newCardData)
+      const createdBossCard = {
+        ...res.data,
+        originalCardId: baseCard.id,
+        extraType: boostType,
+      }
+
+      setSelectedCards((prev) => [...prev, createdBossCard])
+      setShowDialog(false)
+      setBossName("")
+      setBoostType("")
+      setBaseCard(null)
+    } catch (error) {
+      console.error("Hiba a vezérkártya létrehozásakor:", error)
+    }
   }
 
   return (
@@ -143,6 +196,7 @@ const DungeonCardSelector = () => {
                       ? "Levegő típus"
                       : "Föld típus"}
                   </div>
+                  
                 </Card>
               ))}
             </div>
@@ -179,7 +233,18 @@ const DungeonCardSelector = () => {
                       : Number(card.affinity) === 4
                       ? "Levegő típus"
                       : "Föld típus"}
-                  </div>          
+                  </div> 
+                  <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setBaseCard(card)
+                        setShowDialog(true)
+                      }}
+                    >
+                      Vezérré alakítás
+                    </Button>         
                 </Card>
               ))}
             </div>
@@ -191,6 +256,60 @@ const DungeonCardSelector = () => {
             Mentés
           </Button>
       </div>
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Vezérkártya létrehozása</DialogTitle>
+          </DialogHeader>
+
+          {baseCard && (
+            <div className="space-y-3">
+              <Label>Név</Label>
+              <Input
+                value={bossName}
+                onChange={(e) => setBossName(e.target.value)}
+                placeholder="Pl. A Föld Ura"
+              />
+
+              <Label>Származtatás típusa</Label>
+              <div className="flex gap-2">
+                <Button
+                  variant={boostType === "damage" ? "default" : "outline"}
+                  onClick={() => setBoostType("damage")}
+                >
+                  Sebzés duplázás
+                </Button>
+                <Button
+                  variant={boostType === "health" ? "default" : "outline"}
+                  onClick={() => setBoostType("health")}
+                >
+                  Életerő duplázás
+                </Button>
+              </div>
+
+              <div className="mt-3 text-sm text-muted-foreground">
+                <p>
+                  Alap kártya: <strong>{baseCard.name}</strong>
+                </p>
+                <p>
+                  Új értékek: Sebzés{" "}
+                  <strong>
+                    {boostType === "damage" ? baseCard.damage * 2 : baseCard.damage}
+                  </strong>
+                  , Életerő{" "}
+                  <strong>
+                    {boostType === "health" ? baseCard.health * 2 : baseCard.health}
+                  </strong>
+                </p>
+              </div>
+
+              <Button onClick={handleCreateBoss} disabled={!bossName || !boostType}>
+                Létrehozás
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

@@ -35,6 +35,8 @@ import {
   SelectContent,
   SelectItem,
 } from "./ui/select";
+import Navbar from "./Navbar";
+import CardFilter from "./CardFilter";
 
 type CardType = {
   id: number;
@@ -52,6 +54,7 @@ const GMCardList = () => {
   const [sortType, setSortType] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [affinityFilter, setAffinityFilter] = useState<string>("all");
+  const [filteredCards, setFilteredCards] = useState<any[]>([]);
 
   useEffect(() => {
     api
@@ -123,86 +126,13 @@ const GMCardList = () => {
 
   return (
     <>
-      <div className="mt-2 mx-4 flex flex-col">
-        <nav className="flex justify-between">
-          <Button onClick={() => navigate("/")}><ChevronLeft/>Vissza a menübe</Button>
-          <h1 className="text-2xl font-semibold text-center mb-2">Kártyák</h1>
-          <Button variant={"outline"} onClick={() => navigate("/card")}><PlusIcon/>Kártya létrehozása</Button>
-
-        </nav>
-        <Separator />
-      </div>
-
-      <div className="flex flex-wrap justify-center items-center gap-3 mt-4 mb-4 px-4">
-        <div className="relative w-full max-w-sm">
-          <SearchIcon className="absolute left-2 top-2.5 text-gray-400" size={18} />
-          <Input
-            placeholder="Keresés név alapján..."
-            value={searchTerm}
-            onChange={(e: any) => setSearchTerm(e.target.value)}
-            className="pl-8"
-          />
-        </div>
-
-        <Select
-          value={affinityFilter}
-          onValueChange={(value: string) => setAffinityFilter(value)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Típus szűrés" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Összes típus</SelectItem>
-            <SelectItem value="1">Tűz típus</SelectItem>
-            <SelectItem value="2">Föld típus</SelectItem>
-            <SelectItem value="3">Víz típus</SelectItem>
-            <SelectItem value="4">Levegő típus</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <div className="flex flex-wrap justify-center gap-2">
-          <Button
-            variant={sortType === "name" ? "default" : "outline"}
-            onClick={() => handleSortClick("name")}
-          >
-            Név szerint
-          </Button>
-          <Button
-            variant={sortType === "damage-asc" ? "default" : "outline"}
-            onClick={() => handleSortClick("damage-asc")}
-          >
-            Sebzés ↑
-          </Button>
-          <Button
-            variant={sortType === "damage-desc" ? "default" : "outline"}
-            onClick={() => handleSortClick("damage-desc")}
-          >
-            Sebzés ↓
-          </Button>
-          <Button
-            variant={sortType === "health-asc" ? "default" : "outline"}
-            onClick={() => handleSortClick("health-asc")}
-          >
-            Életerő ↑
-          </Button>
-          <Button
-            variant={sortType === "health-desc" ? "default" : "outline"}
-            onClick={() => handleSortClick("health-desc")}
-          >
-            Életerő ↓
-          </Button>
-          <Button
-            variant={sortType === "affinity" ? "default" : "outline"}
-            onClick={() => handleSortClick("affinity")}
-          >
-            Típus szerint
-          </Button>
-        </div>
-      </div>
+      <Navbar />
+      <CardFilter data={data} onFilter={setFilteredCards} />
+      
 
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-4 p-4">
-        {filteredData.length > 0 ? (
-          filteredData.map((card) => (
+        {filteredCards.length > 0 ? (
+          filteredCards.map((card) => (
             <Card key={card.id} className="CreatedCard p-2 w-full max-h-fit min-w-[245px]">
               {/* <div
                 id="color"

@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import { Card, CardTitle } from './ui/card'
 import { HeartIcon, SwordIcon } from 'lucide-react'
 import { Button } from './ui/button'
+import Navbar from './Navbar'
+import CardFilter from './CardFilter'
 
 const GameEnvironment = () => {
   const navigate = useNavigate()
   const [cards, setCards] = useState<any[]>([])
   const [selectedCards, setSelectedCards] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [filteredCards, setFilteredCards] = useState<any[]>([])
   
   useEffect(() => {
     api.get("/game/cards/")
@@ -56,10 +59,13 @@ const GameEnvironment = () => {
   }
 
   return (
+    <>
+    <Navbar />
+    <CardFilter data={cards} onFilter={setFilteredCards} />
     <div className="min-h-screen bg-background p-6">
+        
         <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold">Játékkörnyezet létrehozása</h1>
-            <Button onClick={() => navigate("/")}>Vissza</Button>
         </div>
         <div className="flex flex-col md:flex-row gap-8">
             <div className='flex-1'>
@@ -108,7 +114,7 @@ const GameEnvironment = () => {
                     <p className="text-muted-foreground">Nincs több elérhető kártya.</p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {cards.map(card => (
+                        {filteredCards.map(card => (
                             <Card
                             key={card.id}
                             onClick={() => toggleCard(card)}
@@ -147,6 +153,8 @@ const GameEnvironment = () => {
         </div>
         
     </div>
+    </>
+    
     
     
   )
