@@ -1,6 +1,6 @@
 import api from '@/api'
 import { Separator } from '@radix-ui/react-dropdown-menu'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, CardTitle } from './ui/card'
 import { HeartIcon, SwordIcon } from 'lucide-react'
@@ -11,7 +11,9 @@ const GameEnvironment = () => {
   const [cards, setCards] = useState<any[]>([])
   const [selectedCards, setSelectedCards] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
-  
+
+  loading
+
   useEffect(() => {
     api.get("/game/cards/")
       .then(res => setCards(res.data))

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button"
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants"
 import {
   Card,
-  CardAction
 } from "@/components/ui/card"
 import { useForm } from "react-hook-form"
 import { Form } from "@/components/ui/form"
@@ -14,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "@/api"
-import { is } from "zod/v4/locales"
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert"
 
 const passwordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;

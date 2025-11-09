@@ -2,7 +2,7 @@ import api from '@/api'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { Card, CardTitle } from './ui/card'
 import { Separator } from '@/components/ui/separator'
 import { useLocation } from "react-router-dom"
 import { SwordIcon, HeartIcon } from "lucide-react"
@@ -68,21 +68,6 @@ const DungeonCardSelector = () => {
     }
   }
   const cardLimit = getCardLimit(type)
-
-  const getAffinityName = (affinity: number | string) => {
-    switch  (Number(affinity)){
-      case 1: 
-        return "Tűz"
-      case 2: 
-        return "Föld"
-      case 3:
-        return "Víz"
-      case 4:
-        return "Levegő"
-      default:
-        return "Ismeretlen"
-    }
-  }
 
   const handleSave = () => {
     if (selectedCards.length !== cardLimit) {
