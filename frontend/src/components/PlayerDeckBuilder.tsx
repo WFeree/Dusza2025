@@ -96,7 +96,7 @@ const PlayerDeckBuilder = () => {
     <Card
       key={card.id}
       onClick={() => toggleCard(card)}
-      className={`CreatedCard p-2 w-full max-h-fit min-w-[245px] cursor-pointer transition-all duration-200 ${
+      className={`CreatedCard p-2 w-full max-h-fit min-w-[220px] cursor-pointer transition-all duration-200 ${
         isSelected ? "border-blue-500 bg-blue-100" : "hover:border-gray-400"
       }`}
     >
@@ -156,7 +156,7 @@ const PlayerDeckBuilder = () => {
             {availableCards.length === 0 ? (
               <p className="text-muted-foreground">Nincsenek elérhető kártyák ehhez a játékhoz.</p>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {availableCards.map((card) =>
                   renderCard(card, selectedCards.some((c) => c.id === card.id))
                 )}
