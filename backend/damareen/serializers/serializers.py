@@ -67,13 +67,8 @@ class DungeonSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['id', 'creator', 'cards'] 
+        fields = ['id', 'creator'] 
         extra_kwargs = {'id': {'read_only': True}}
-    
-    def validate_cards(self, value):
-        if len(value) < 2:
-            raise serializers.ValidationError("Egy játéknak legalább 2 kártyát kell tartalmaznia.")
-        return value
 
 class PlayerCardSerializer(serializers.ModelSerializer):
     class Meta:
