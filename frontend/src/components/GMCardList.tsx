@@ -37,8 +37,8 @@ const GMCardList = () => {
   const [affinityFilter, setAffinityFilter] = useState<string>("all");
   const [filteredCards, setFilteredCards] = useState<any[]>([]);
 
-  filteredData
   setSortType
+  filteredData
   setSearchTerm
   setAffinityFilter
 
