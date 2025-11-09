@@ -40,8 +40,10 @@ class PlayerCardListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        game = self.request.data["game"]
-        return PlayerCard.objects.filter(game = game)
+        game_id = self.request.query_params.get("game")
+        print("🎯 GET game param:", game_id)
+        print("🎮 PlayerCard count:", PlayerCard.objects.count())
+        return PlayerCard.objects.all()
 
 @api_view(['POST'])
 def ChallangeDungeon(req):
@@ -82,3 +84,7 @@ class DeleteCard(generics.DestroyAPIView):
 
     queryset = Card.objects.all()
     serializer_class = CardSerializer
+
+class DungeonRetrieveView(generics.RetrieveAPIView):
+    queryset = Dungeon.objects.all()
+    serializer_class = DungeonSerializer

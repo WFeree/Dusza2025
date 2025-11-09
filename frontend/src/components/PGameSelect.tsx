@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "@/api";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type GameType = {
   id: number;
@@ -17,6 +17,7 @@ type DungeonType = {
 
 const PGameSelect = () => {
   const navigate = useNavigate();
+  const location = useLocation()
 
   const [GData, setGData] = useState<GameType[]>([]);
   const [DData, setDData] = useState<DungeonType[]>([]);
@@ -47,6 +48,13 @@ const PGameSelect = () => {
       })
       .catch((error) => console.error(error));
   }, []);
+
+  useEffect(() => {
+    if (location.state?.reopen && location.state?.gameId) {
+      setGameId(location.state.gameId)
+      setGameStarted(true)
+    }
+  }, [location.state])
 
   const relatedDungeons = DfilteredData.filter((d) => d.game === gameId);
 
@@ -92,7 +100,9 @@ const PGameSelect = () => {
                 <Card key={`dungeon-${dungeon.id}-${index}`}>
                   <CardContent>
                     <CardTitle>Dungeon {dungeon.id}</CardTitle>
-                    <Button>Harc</Button>
+                    <Button onClick={() => navigate("/player/deckbuilder", {state: { gameId, dungeonId: dungeon.id },})}>
+                      Harc
+                    </Button>
                   </CardContent>
                 </Card>
               ))
