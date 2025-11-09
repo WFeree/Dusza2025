@@ -198,7 +198,7 @@ const PlayerDeckBuilder = () => {
   if (loading) {
     return (
       <>
-        <Navbar />
+        <PNavbar />
         <div className="flex justify-center items-center h-screen">
           <p className="text-muted-foreground">Betöltés...</p>
         </div>
