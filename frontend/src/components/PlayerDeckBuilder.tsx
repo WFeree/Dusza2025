@@ -4,7 +4,7 @@ import api from "@/api"
 import { Card, CardTitle, CardDescription } from "./ui/card"
 import { Button } from "./ui/button"
 import { SwordIcon, HeartIcon } from "lucide-react"
-import Navbar from "./PNavbar"
+import PNavbar from "./PNavbar"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
@@ -133,11 +133,22 @@ const PlayerDeckBuilder = () => {
     })
   }
 
+  if (loading) {
+    return (
+      <>
+        <PNavbar />
+        <div className="flex justify-center items-center h-screen">
+          <p className="text-muted-foreground">Betöltés...</p>
+        </div>
+      </>
+    )
+  }
+
   const renderCard = (card: GameCard, isSelected: boolean) => (
     <Card
       key={card.id}
       onClick={() => toggleCard(card)}
-      className={`CreatedCard p-2 w-full max-h-fit min-w-[245px] cursor-pointer transition-all duration-200 ${
+      className={`CreatedCard p-2 w-full max-h-fit min-w-[220px] cursor-pointer transition-all duration-200 ${
         isSelected ? "border-blue-500 bg-blue-100" : "hover:border-gray-400"
       }`}
     >
@@ -197,7 +208,7 @@ const PlayerDeckBuilder = () => {
 
   return (
     <>
-      <Navbar />
+      <PNavbar />
       <div className="min-h-screen bg-background p-6">
         <h1 className="text-2xl font-bold mb-6 text-center">Pakli összeállítása</h1>
 
@@ -218,7 +229,7 @@ const PlayerDeckBuilder = () => {
 
           <div className="flex-1">
             <h2 className="text-lg font-semibold mb-2">Elérhető kártyák</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {availableCards.map((card) =>
                 renderCard(card, selectedCards.some((c) => c.id === card.id))
               )}
