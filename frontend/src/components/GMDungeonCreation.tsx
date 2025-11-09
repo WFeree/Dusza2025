@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "./ui/button"
 import { Label } from "@/components/ui/label"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useNavigate } from "react-router-dom"
 import { useLocation } from "react-router-dom"
@@ -19,6 +19,8 @@ export default function DungeonCreator() {
   const [selectedCards, setSelectedCards] = useState(location.state?.selectedCards || [])
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  errorMessage
 
   useEffect(() => {
     const idFromState = location.state?.gameId
@@ -56,6 +58,7 @@ export default function DungeonCreator() {
     const bossCard = selectedCards.length > 0 ? selectedCards[0].id : null
 
     const res = await api.post("/game/dungeons/", {
+      name: title,
       game: gameId,
       cards: cardIds,
       dungeonType,

@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form"
-import { set, z } from "zod"
+import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UserIcon, EyeIcon, EyeClosedIcon, LockIcon, CircleAlertIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants"
 import { useNavigate } from "react-router-dom"
 import api from "@/api"
 import {
@@ -79,6 +78,7 @@ export default function Register(){
         "username": data.username,
         "password": data.password
       })
+      res
       navigate("/login");
     } catch (error: unknown) {
         const message =
