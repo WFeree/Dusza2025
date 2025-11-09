@@ -252,11 +252,6 @@ const DungeonCardSelector = () => {
           )}
         </div>
       </div>
-      <div className="mt-8 flex justify-center">
-          <Button onClick={handleSave}>
-            Mentés
-          </Button>
-      </div>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-md rounded-xl">
           <DialogHeader>

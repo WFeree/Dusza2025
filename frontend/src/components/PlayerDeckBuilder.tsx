@@ -28,7 +28,6 @@ const PlayerDeckBuilder = () => {
   const [bossCard, setBossCard] = useState<GameCard | null>(null)
   const [loading, setLoading] = useState(false)
 
-  // vezérkártya létrehozáshoz
   const [showDialog, setShowDialog] = useState(false)
   const [baseCard, setBaseCard] = useState<GameCard | null>(null)
   const [bossName, setBossName] = useState("")
@@ -107,7 +106,7 @@ const PlayerDeckBuilder = () => {
       const createdBoss = res.data
 
       setBossCard(createdBoss)
-      setSelectedCards((prev) => [...prev, createdBoss]) // ✅ azonnal hozzáadja a kiválasztottakhoz
+      setSelectedCards((prev) => [...prev, createdBoss])
       setShowDialog(false)
       setBaseCard(null)
       setBossName("")
@@ -177,7 +176,6 @@ const PlayerDeckBuilder = () => {
           : "Föld típus"}
       </div>
 
-      {/* Csak akkor engedélyezzük, ha a dungeonhoz jár vezér */}
       {dungeonLimit.boss > 0 && (
         <Button
           size="sm"
@@ -242,7 +240,6 @@ const PlayerDeckBuilder = () => {
         </div>
       </div>
 
-      {/* vezérkártya létrehozás modal */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-md rounded-xl">
           <DialogHeader>
