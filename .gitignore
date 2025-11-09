@@ -1,4 +1,5 @@
 venv/
+myvenv/
 __pycache__/
 frontend/node_modules/
 backend/db.sqlite3
