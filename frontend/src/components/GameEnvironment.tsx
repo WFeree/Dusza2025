@@ -8,9 +8,9 @@ import { Button } from './ui/button'
 
 const GameEnvironment = () => {
   const navigate = useNavigate()
-  
   const [cards, setCards] = useState<any[]>([])
   const [selectedCards, setSelectedCards] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
   
   useEffect(() => {
     api.get("/game/cards/")
@@ -29,13 +29,30 @@ const GameEnvironment = () => {
     }
   }
 
-  const handleSave = () => {
-    localStorage.setItem("environmentCards", JSON.stringify(selectedCards))
-    alert(`Gyűjtemény mentve (${selectedCards.length} kártya)!`)
-  }
+  const handleSave = async () => {
+    setLoading(true)
+    try {
+        const gameRes = await api.post("/game/games/", {})
+        const gameId = gameRes.data.id
+        console.log("Game létrehozva, ID:", gameId)
 
-  const handleCreateDungeon = () => {
-    navigate("/dungeon")
+        for (const card of selectedCards){
+            await api.post("/game/playerCards/", {
+                "game": gameId,
+                "card": card.id,
+                "isBoss": false,
+                "extra": false
+            })
+        }
+        alert(`Gyűjtemény sikeresen mentve az adatbázisba! (${selectedCards.length} kártya)`)
+
+        navigate("/dungeon", { state: { gameId } })
+    }catch (error) {
+        console.error("Hiba a gyűjtemény mentésekor:", error)
+        alert("Nem sikerült menteni a gyűjteményt.")
+    } finally {
+        setLoading(false)
+    }
   }
 
   return (
@@ -84,9 +101,6 @@ const GameEnvironment = () => {
             </div>
             <div className="mt-8 flex justify-center gap-4">
                 <Button onClick={handleSave}>Gyűjtemény mentése</Button>
-                <Button variant="outline" onClick={handleCreateDungeon}>
-                    Kazamata létrehozása
-                </Button>
             </div>
             <div className="flex-1">
                 <h2 className="text-lg font-semibold mb-2">Elérhető kártyák</h2>

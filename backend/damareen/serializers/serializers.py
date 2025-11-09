@@ -61,8 +61,8 @@ class DungeonSerializer(serializers.ModelSerializer):
 
         match value['dungeonType']:
             case 1:
-                if len(value['cards']) != 2:
-                    raise serializers.ValidationError("A SIMPLE típusú kazamatákat pontosan 2 kártyát kell tartalmaznia.")
+                if len(value['cards']) != 1:
+                    raise serializers.ValidationError("A SIMPLE típusú kazamatákat pontosan 1 kártyát kell tartalmaznia.")
             case 2:
                 if len(value['cards']) != 3 or not value['boss']:
                     raise serializers.ValidationError("A SMALL típusú kazamatákat pontosan 3 kártyát kell tartalmaznia, amelyek közül egy vezér.")
@@ -74,13 +74,8 @@ class DungeonSerializer(serializers.ModelSerializer):
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
-        fields = ['id', 'creator', 'cards'] 
+        fields = ['id', 'creator'] 
         extra_kwargs = {'id': {'read_only': True}}
-    
-    def validate_cards(self, value):
-        if len(value) < 2:
-            raise serializers.ValidationError("Egy játéknak legalább 2 kártyát kell tartalmaznia.")
-        return value
 
 class PlayerCardSerializer(serializers.ModelSerializer):
     class Meta:

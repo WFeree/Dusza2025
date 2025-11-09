@@ -3,7 +3,7 @@ from .Game import Game
 from django.db import models
 
 class PlayerCard(models.Model):
-    card = models.OneToOneField(Card, on_delete=models.CASCADE, blank=False)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, blank=False)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=False)
 
     extraHealth = models.IntegerField(default=0)
